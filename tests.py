@@ -2,6 +2,7 @@ from genalgorithm import GeneticAlgorithm
 import _pickle as pickle
 import os
 from multiprocessing import Pool, TimeoutError
+import numpy as np
 import problem
 # # определяем текущий каталог и печатаем
 # path = os.getcwd()
@@ -20,12 +21,9 @@ class Test:
             for res in multiple_results:
                 res.get()
 
+    def do_test_(self, obj_func, bounds):
 
-
-
-    def do_test(self,obj_func,bounds):
-
-        path = "E:/stats/"+obj_func.__name__+"/"+str(len(bounds))+"d"
+        path = "E:/stats_gp/" + obj_func.__name__ + "/" + str(len(bounds)) + "d"
 
         try:
             os.makedirs(path)
@@ -36,28 +34,69 @@ class Test:
         fit = []
         x = []
         for run in range(self.runs):
-            ga = GeneticAlgorithm(algorithm="ga",
+            gp = GeneticAlgorithm(algorithm="gp",
                                   objective_function=obj_func,
-                                  bounds=bounds,
+                                  variables=bounds,
                                   selfconfiguration=False,
                                   size_of_population=100,
                                   iterations=300,
                                   type_selection="tournament_9",
-                                  type_crossover="two_point",
+                                  type_crossover="one_point",
                                   type_mutation="weak",
                                   nprint=-1)
-            ga.run()
-            fit.append(ga.fit_stats)
-            x.append(ga.x_stats)
+            gp.run_dynamic()
+            fit.append(gp.fit_stats)
 
-        stats = {"fit":fit,"x":x}
+        fit = np.array(fit)
+        np.savez(path + "/dynamic#tournament_9#one_point#weak", fit=fit)
+        print("Успешно записан %s" % "/dynamic#tournament_9#one_point#weak")
 
-        with open(path+'/standard#tournament_9#two_point#weak_stats.pickle', 'wb') as f:
-            try:
-                pickle.dump(stats, f)
-                print("Успешно записан "+ path+'/standard#tournament_9#two_point#weak_stats.pickle')
-            except:
-                print("Ошибка сохранения")
+    def do_test(self,obj_func,bounds):
+
+        path = "E:/stats_np3/"+obj_func.__name__+"/"+str(len(bounds))+"d"
+
+        try:
+            os.makedirs(path)
+        except OSError:
+            print("Создать директорию %s не удалось" % path)
+        else:
+            print("Успешно создана директория %s" % path)
+
+        params = [["dynamic","tournament_9","one_point","weak"],
+                  ["dynamic","tournament_9", "two_point", "strong"],
+                  ["standard","tournament_2", "two_point", "weak"],
+                  ["standard","tournament_9", "one_point", "weak"],
+                  ["standard","tournament_9", "two_point", "strong"]]
+
+        for param in params:
+            fit = []
+            x = []
+            for run in range(self.runs):
+                ga = GeneticAlgorithm(algorithm="ga",
+                                      objective_function=obj_func,
+                                      bounds=bounds,
+                                      selfconfiguration=False,
+                                      scheme=param[0],
+                                      size_of_population=100,
+                                      iterations=300,
+                                      type_selection=param[1],
+                                      type_crossover=param[2],
+                                      type_mutation=param[3],
+                                      nprint=-1)
+                ga.run()
+                fit.append(ga.fit_stats)
+                x.append(ga.x_stats)
+
+            fit = np.array(fit)
+            x = np.array(x)
+            np.savez(path + "/"+ga.name, fit=fit,sol =x)
+            print("Успешно записан %s" % ga.name)
+        # with open(path+'/standard#selfconfiguration.pickle', 'wb') as f:
+        #     try:
+        #         pickle.dump(stats, f)
+        #         print("Успешно записан "+ path+'/standard#selfconfiguration.pickle')
+        #     except:
+        #         print("Ошибка сохранения")
 
 
 

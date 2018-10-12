@@ -6,6 +6,7 @@ from builtins import print
 from matplotlib import pyplot as plt
 
 import numpy as np
+import random as rn
 #rn.seed(7)
 import genalgorithm, problem
 import ndtestfuncs
@@ -21,13 +22,13 @@ class problem():
 
 
 
-
+import problem as pr
 if __name__ == '__main__':
 
     # gp = GeneticProgramming(objective_function=objective_function,variables=variables)
 
     test =  tests.Test()
-    dims = [5,10]
+    dims = [2,5,10]
     allfuncnames = tfunc.funcnames_minus()
     allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
     allbounds = []
@@ -37,19 +38,29 @@ if __name__ == '__main__':
 
 
     test.start_parallel(allfuncs,allbounds)
-    # ga = genalgorithm.GeneticAlgorithm(algorithm="ga",
-    #                                    objective_function=allfuncs[0],
-    #                                    bounds=allbounds[0],
+    # gp = genalgorithm.GeneticAlgorithm(algorithm="gp",
+    #                                    objective_function=pr.objective_function,
+    #                                    variables=pr.variables,
     #                                    selfconfiguration=False,
     #                                    size_of_population = 100,
     #                                    iterations=100,
-    #                                    type_selection="tournament_5",
-    #                                    type_crossover="two_point",
-    #                                    type_mutation="weak",
-    #                                    nprint=5)
-    #gp = GP.GeneticProgramming("gp",objective_function=problem.objective_function, variables=problem.variables)
-    #ga.run_dynamic()
-    #cProfile.run("ga.run()", sort="cumtime")
+    #                                    type_selection="tournament_9",
+    #                                    type_crossover="one_point",
+    #                                    type_mutation="growth",
+    #                                    nprint=1)
+    # ga = genalgorithm.GeneticAlgorithm(algorithm="ga",
+    #                       objective_function=allfuncs[12],
+    #                       bounds=allbounds[12],
+    #                       selfconfiguration=False,
+    #                       scheme="standard",
+    #                       size_of_population=100,
+    #                       iterations=100,
+    #                       type_selection="tournament_9",
+    #                       type_crossover="two_point",
+    #                       type_mutation="weak",
+    #                       nprint=-1)
+    # ga.run()
+    # cProfile.run("ga.run()", sort="tottime")
     # fitnesses = ga.fit_stats
     # stats = ga.oper_stats
     # fitnesses =[fitnesses]
@@ -58,15 +69,12 @@ if __name__ == '__main__':
     # определим имя директории, которую создаём
 
 
-
-
-
-
+    #
     # func = gp.population.bestInd.get_result
     # x = []
     # real = []
     # aprox = []
-    # for var,y in problem.data:
+    # for var,y in pr.data:
     #     x.append(var["x0"])
     #     real.append(y)
     #     aprox.append(func(var))

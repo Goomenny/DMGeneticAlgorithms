@@ -33,7 +33,7 @@ class Population:
 
         if algorithm is "gp":
             for i in range(self.size):
-                self.individuums.append(Tree(max_depth=7, growth="part", variables=variables))
+                self.individuums.append(Tree(max_depth=5, growth="part", variables=variables))
         elif algorithm is "ga":
             for i in range(self.size):
                 self.individuums.append(binary_string(bounds=bounds))
@@ -77,17 +77,20 @@ class Population:
 
     def dynamic_scheme(self):
 
+        selection_type, size_tour = self.operators["selection"][0].split("_")
         for i, ind in enumerate(self.individuums):
 
             while True:
-                parent = self.tournamentSelection(2)
+
+                parent = self.tournamentSelection(int(size_tour))
                 if ind != parent:
                     break
 
             new_ind = ind.crossover(parent, crossover_type=self.operators["crossover"][0])
             new_ind.mutate(mutation_type=self.operators["mutation"][0])
             if new_ind.changed:
-                new_ind.fitness = 1 / (1 + self.objective_function(new_ind.get_result))
+                new_ind.calculate_fitness(self.objective_function)
+                # new_ind.fitness = 1 / (1 + self.objective_function(new_ind.get_result))
 
                 if new_ind.fitness > ind.fitness:
                     self.individuums[i] = new_ind
@@ -135,7 +138,8 @@ class Population:
 
         for ind in self.individuums:
             if ind.changed:
-                ind.fitness = 1 / (1 + self.objective_function(ind.get_result))
+                ind.calculate_fitness(self.objective_function)
+                # ind.fitness = 1 / (1 + self.objective_function(ind.get_result))
 
     def findBest(self):
 

@@ -302,7 +302,29 @@ nesterov._bounds     = [-2, 2]
 
 
 saddle._bounds       = [-3, 3]
+#...............................................................................
+ackley._min = 0
+dixonprice._min   = 0
+griewank._min     = 0
+levy._min         = 1
 
+perm._min         = [1,2,3,4] # min at [1 2 .. n]
+powell._min       = 0
+
+rastrigin._min    = 0
+rosenbrock._min   = 1
+schwefel._min     = 420.968746
+sphere._min       = 0
+sum2._min         = 0
+trid._min         = ["-dim**2", "dim**2"]  # fmin -50 6d, -200 10d
+zakharov._min     = 0
+
+ellipse._min      =  0
+
+nesterov._min     = 1 #?
+
+
+saddle._min       = [-3, 3]
 
 #...............................................................................
 def getfuncs( names, dim=0 ):
@@ -327,8 +349,14 @@ def getbounds( funcname, dim ):
     if isinstance( b[1], (bytes, str) ):  b[1] = eval( b[1] )
     return b
 
+
+def getminpoint(name, dim=0):
+    if name == "perm":
+        return [i+1 for i in range(dim)]
+    return [name_to_func[name]._min for i in range(dim)]
+
 #...............................................................................
-_minus = "michalewicz trid"  # nlopt ~ same ?
+_minus = "michalewicz trid perm saddle sphere"   # nlopt ~ same ?
 
 def allfuncs_minus( minus=_minus ):
     return [f for f in allfuncs

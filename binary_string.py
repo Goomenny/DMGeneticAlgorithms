@@ -33,14 +33,13 @@ class binary_string:
 
             self.dec[dim] = self.bounds[dim][0]+summa*self.E[dim]*0.1
 
-    def get_result_tuple(self):
-        self.calculate_result()
-        return self.dec
-
     def get_result(self):
         self.calculate_result()
         return [x for x in self.dec.values()]
 
+    def calculate_fitness(self, obj_func):
+
+        self.fitness = 1 / (1 + obj_func(self.get_result))
     def mutate(self, mutation_type="standard", probability=None):
 
         if not probability:

@@ -26,6 +26,9 @@ class Tree:
     def get_depth(self):
 
         return self.root.get_depth()
+    def calculate_fitness(self, obj_func):
+
+        self.fitness = 1 / (1 + obj_func(self.get_result))
 
     def crossover(self, other, crossover_type="standard"):
         self_copy = copy.deepcopy(self)
@@ -37,15 +40,20 @@ class Tree:
             changednode = rn.choice(self_copy.root.getNodesFromLayer(rnselflayer))
             nodeforchange = rn.choice(other.root.getNodesFromLayer(rnlayer))
 
-        else:
+        elif crossover_type == "one_point":
             common_nodes = self_copy.root.getSimilarNodes(other.root)
-            if common_nodes[1:]:
-                changednode, nodeforchange = rn.choice(common_nodes[1:])
+            if common_nodes:
+                if common_nodes[1:]:
+                    changednode, nodeforchange = rn.choice(common_nodes[1:])
+            else:
+                self_copy.changed = False
+                return self_copy
+
 
         if crossover_type is "standard" or common_nodes[1:]:
             if changednode.deep + nodeforchange.get_depth() - nodeforchange.deep > self.max_depth:
-                self.changed = False
-                return self
+                self_copy.changed = False
+                return self_copy
             else:
                 changednode.crossover(nodeforchange)
                 self_copy.changed = True

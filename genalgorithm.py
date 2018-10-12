@@ -14,8 +14,10 @@ class GeneticAlgorithm:
                  nprint = 1,
                  type_selection = None,
                  type_crossover = None,
-                 type_mutation = None):
-
+                 type_mutation = None,
+                 scheme = "dynamic"):
+        self.scheme = scheme
+        self.algorithm = algorithm
         self.selfconfiguration = selfconfiguration
         self.objective_function = objective_function
         self.population = Population(algorithm = algorithm,
@@ -27,6 +29,13 @@ class GeneticAlgorithm:
                                      type_crossover=type_crossover,
                                      type_mutation=type_mutation
                                      )
+
+        self.name = algorithm+"#"+scheme+"#"
+        if self.selfconfiguration:
+            self.name += "selfconfiguration"
+        else:
+            self.name += "notselfconf"
+        self.name += "#"+type_selection+"#"+type_crossover+"#"+type_mutation
 
         self.selection_type = []
         self.mutation_type = []
@@ -62,26 +71,28 @@ class GeneticAlgorithm:
         if i % self.nprint == 0 and self.nprint != -1:
             fitnesses = np.array(self.population.get_fitnesses())
             print("Mean", fitnesses.mean(), "Std", fitnesses.std(), "Mode", np.percentile(fitnesses, 50))
-            #print(i, self.population.bestInd.fitness, self.objective_function(self.population.bestInd.get_result))
-            print(self.population.bestInd.get_result_tuple())
-
+            print(i, self.population.bestInd.fitness, self.objective_function(self.population.bestInd.get_result))
+            if self.algorithm == "ga":
+                print(self.population.bestInd.get_result())
+            elif self.algorithm == "gp":
+                print(self.population.bestInd.get_formula())
     def reset_probabilities(self):
 
         self.params = {operator:{type: dict(probability=1 / len(self.operators[operator]), average_fitness=0, amount = 0) for type in self.operators[operator]}  for operator in self.operators }
 
-    def recount_probabilities(self):
+    def recount_probabilities(self, population):
 
         for operator, types in self.params.items():
             for type in types:
-                self.params[operator][type]["amount"] = self.population.operators[operator].count(type)
-                if self.population.operators[operator][self.population.i_best] is type:
+                self.params[operator][type]["amount"] = population.operators[operator].count(type)
+                if population.operators[operator][population.i_best] is type:
                     self.params[operator][type]["amount"] -= 1
 
 
         for operator, types in self.population.operators.items():
             for i, type in enumerate(types):
-                if self.params[operator][type]["amount"] != 0 and i != self.population.i_best:
-                    self.params[operator][type]["average_fitness"] += self.population.fitness(i) / self.params[operator][type]["amount"]
+                if self.params[operator][type]["amount"] != 0 and i != population.i_best:
+                    self.params[operator][type]["average_fitness"] += population.fitness(i) / self.params[operator][type]["amount"]
 
         for operator, types in self.params.items():
             extra_probability = 0
@@ -116,9 +127,10 @@ class GeneticAlgorithm:
     def add_stats(self):
 
         self.fit_stats.append(self.population.get_fitnesses())
-        self.x_stats.append(self.population.bestInd.get_result_tuple())
+        if self.algorithm == "ga":
+            self.x_stats.append(self.population.bestInd.get_result())
 
-    def run(self):
+    def run_standard(self):
 
         if self.selfconfiguration:
             self.select_operators()
@@ -135,7 +147,7 @@ class GeneticAlgorithm:
             self.population.rankSelection()
 
             if i > 0 and self.selfconfiguration:
-                self.recount_probabilities()
+                self.recount_probabilities(self.population)
                 self.select_operators()
                 self.save_selfconf_probabilities()
 
@@ -162,4 +174,9 @@ class GeneticAlgorithm:
             self.population.findBest()
             self.add_stats()
 
+    def run(self):
 
+        if self.scheme == "dynamic":
+            self.run_dynamic()
+        elif self.scheme == "standard":
+            self.run_standard()

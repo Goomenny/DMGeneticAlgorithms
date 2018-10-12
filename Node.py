@@ -1,13 +1,15 @@
 import random as rn
 import copy
 import math
-
+from math import cos,sin,exp
 # OPERATORS = {'+': (lambda x, y: x + y), '-': (lambda x, y: x - y),
 #              '*': (lambda x, y: x * y), '/': (lambda x, y: x / y)}
 
 import operator
-OPERATORS = {'+': (operator.add), '-': (operator.sub),
-             '*': (operator.mul), '/': (operator.truediv)}
+OPERATORS = {'+': (operator.add,2), '-': (operator.sub,2),
+             '*': (operator.mul,2), '/': (operator.truediv,2)}
+    # ,
+    #          'sin': (sin, 1),'cos': (cos,1),'exp': (exp,1)}
 
 rncargo = lambda: (rn.random() * 2 - 1)
 
@@ -34,21 +36,24 @@ class Node:
             self.type = node_type
 
         self.deep = deep
-        self.arn = 2
+
         self.func = func
         if self.type:
             self.cargo = rn.choice(list(OPERATORS.keys()))
+            self.arity = OPERATORS[self.cargo][1]
         else:
+            self.arity = 0
             if rn.choice([True, False]):
                 self.cargo = rncargo()
                 self.variable = False
             else:
                 self.variable = True
                 self.cargo = rn.choice(self.variables)
+
         self.parent = parent
         self.offspring = []
         if self.type:
-            for i in range(self.arn):
+            for i in range(self.arity):
                 self.offspring.append(Node(parent=self,
                                            deep=deep + 1,
                                            max_depth=max_depth,
@@ -69,25 +74,37 @@ class Node:
 
 
         if self.type:
-            formula = ""
-            formula += "("
-            for node in self.offspring[:-1]:
-                formula += node.get_formula()
-                formula += self.cargo
-            formula += self.offspring[-1].get_formula()
-            formula += ")"
-            return formula
+            if self.arity == 1:
+                formula = self.cargo
+                formula += "("
+                formula += self.offspring[0].get_formula()
+                formula += ")"
+                return formula
+            elif self.arity == 2:
+                formula = ""
+                formula += "("
+                for node in self.offspring[:-1]:
+                    formula += node.get_formula()
+                    formula += self.cargo
+                formula += self.offspring[-1].get_formula()
+                formula += ")"
+                return formula
         else:
             return str(self.cargo)
 
 
     def evaluate(self, var):
         if self.type:
-
-            try:
-                return OPERATORS[self.cargo](self.offspring[0].evaluate(var), self.offspring[1].evaluate(var))
-            except ZeroDivisionError:
-                return 1000000
+            if self.arity == 1:
+                try:
+                    return OPERATORS[self.cargo][0](self.offspring[0].evaluate(var))
+                except OverflowError:
+                    return 1
+            else:
+                try:
+                    return OPERATORS[self.cargo][0](self.offspring[0].evaluate(var), self.offspring[1].evaluate(var))
+                except ZeroDivisionError:
+                    return 100000000
         elif self.variable:
             return var[self.cargo]
         else:
@@ -107,7 +124,7 @@ class Node:
 
         if self.type == other.type:
 
-            if self.type:
+            if self.type and self.arity == other.arity:
                 nodes = [[self, other]]
                 offspring_nodes = []
                 for self_offspring,other_offspring in zip(self.offspring,other.offspring):
@@ -121,7 +138,7 @@ class Node:
                 if offspring_nodes:
                     nodes += offspring_nodes
                 return nodes
-            elif self.variable == other.variable:
+            elif not self.type and self.variable == other.variable:
                 return [self,other]
             else:
                 return
@@ -155,17 +172,23 @@ class Node:
 
         if rn.random() < probability:
             if self.type:
-
-                self.cargo = rn.choice(list(OPERATORS.keys()))
+                fl = True
+                while fl:
+                    self.cargo = rn.choice(list(OPERATORS.keys()))
+                    if OPERATORS[self.cargo][1] == self.arity:
+                        fl = False
+                        break
             elif self.variable:
-                self.variable = False
-                self.cargo = rncargo()
+
+                variables = self.variables
+                if len(variables)>1:
+                    variables.remove(self.cargo)
+                self.cargo = rn.choice(variables)
             else:
-                self.variable = True
-                self.cargo = rn.choice(self.variables)
+                self.cargo = rncargo()
             return True
-        flag = False
+        changed = False
         for ind in self.offspring:
             if ind.mutate(probability):
-                flag = True
-        return flag
+                changed = True
+        return changed
