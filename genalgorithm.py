@@ -35,7 +35,7 @@ class GeneticAlgorithm:
             self.name += "selfconfiguration"
         else:
             self.name += "notselfconf"
-        self.name += "#"+type_selection+"#"+type_crossover+"#"+type_mutation
+            self.name += "#"+type_selection+"#"+type_crossover+"#"+type_mutation
 
         self.selection_type = []
         self.mutation_type = []
@@ -80,19 +80,19 @@ class GeneticAlgorithm:
 
         self.params = {operator:{type: dict(probability=1 / len(self.operators[operator]), average_fitness=0, amount = 0) for type in self.operators[operator]}  for operator in self.operators }
 
-    def recount_probabilities(self, population):
+    def recount_probabilities(self, is_trial = False, include_best=True):
 
         for operator, types in self.params.items():
             for type in types:
-                self.params[operator][type]["amount"] = population.operators[operator].count(type)
-                if population.operators[operator][population.i_best] is type:
+                self.params[operator][type]["amount"] = self.population.operators[operator].count(type)
+                if include_best and self.population.operators[operator][self.population.i_best] is type:
                     self.params[operator][type]["amount"] -= 1
 
 
         for operator, types in self.population.operators.items():
             for i, type in enumerate(types):
-                if self.params[operator][type]["amount"] != 0 and i != population.i_best:
-                    self.params[operator][type]["average_fitness"] += population.fitness(i) / self.params[operator][type]["amount"]
+                if self.params[operator][type]["amount"] != 0 and i != self.population.i_best:
+                    self.params[operator][type]["average_fitness"] += self.population.fitness(i,is_trial=is_trial) / self.params[operator][type]["amount"]
 
         for operator, types in self.params.items():
             extra_probability = 0
@@ -147,7 +147,7 @@ class GeneticAlgorithm:
             self.population.rankSelection()
 
             if i > 0 and self.selfconfiguration:
-                self.recount_probabilities(self.population)
+                self.recount_probabilities()
                 self.select_operators()
                 self.save_selfconf_probabilities()
 
@@ -162,14 +162,27 @@ class GeneticAlgorithm:
 
     def run_dynamic(self):
 
+        if self.selfconfiguration:
+            self.select_operators()
+            self.save_selfconf_probabilities()
+
         self.population.calculate_fitnesses()
         self.population.findBest()
         self.add_stats()
+
         for i in range(self.iterations):
 
             self.print_iter_stats(i)
 
-            self.population.dynamic_scheme()
+            self.population.proportionalSelection()
+            self.population.rankSelection()
+
+            if i > 0 and self.selfconfiguration:
+                self.recount_probabilities(is_trial=True,include_best=False)
+                self.select_operators()
+                self.save_selfconf_probabilities()
+
+            self.population.dynamic_evolve()
 
             self.population.findBest()
             self.add_stats()

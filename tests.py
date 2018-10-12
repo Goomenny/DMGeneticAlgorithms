@@ -62,11 +62,7 @@ class Test:
         else:
             print("Успешно создана директория %s" % path)
 
-        params = [["dynamic","tournament_9","one_point","weak"],
-                  ["dynamic","tournament_9", "two_point", "strong"],
-                  ["standard","tournament_2", "two_point", "weak"],
-                  ["standard","tournament_9", "one_point", "weak"],
-                  ["standard","tournament_9", "two_point", "strong"]]
+        params = [["dynamic",True,"tournament_9","one_point","weak"]]
 
         for param in params:
             fit = []
@@ -75,13 +71,13 @@ class Test:
                 ga = GeneticAlgorithm(algorithm="ga",
                                       objective_function=obj_func,
                                       bounds=bounds,
-                                      selfconfiguration=False,
+                                      selfconfiguration=param[1],
                                       scheme=param[0],
                                       size_of_population=100,
                                       iterations=300,
-                                      type_selection=param[1],
-                                      type_crossover=param[2],
-                                      type_mutation=param[3],
+                                      type_selection=param[2],
+                                      type_crossover=param[3],
+                                      type_mutation=param[4],
                                       nprint=-1)
                 ga.run()
                 fit.append(ga.fit_stats)

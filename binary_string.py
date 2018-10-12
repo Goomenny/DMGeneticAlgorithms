@@ -1,6 +1,7 @@
 import math
 import random as rn
 import copy
+import numpy as np
 class binary_string:
     def __init__(self,
                  bounds = None):
@@ -15,7 +16,7 @@ class binary_string:
                 N = int(N+1)
             else:
                 N = int(N)
-            self.cargo["x"+str(dim)] = [rn.choice([0,1]) for i in range(N)]
+            self.cargo["x"+str(dim)] = np.array([rn.choice([0,1]) for i in range(N)])
             self.E["x" + str(dim)] = (bound[1]-bound[0])/(2**N*0.1)
             self.bounds["x" + str(dim)] = [bound[0],bound[1]]
         self.fitness = None
@@ -40,6 +41,7 @@ class binary_string:
     def calculate_fitness(self, obj_func):
 
         self.fitness = 1 / (1 + obj_func(self.get_result))
+        self.changed = False
     def mutate(self, mutation_type="standard", probability=None):
 
         if not probability:
@@ -53,6 +55,7 @@ class binary_string:
         for dim, genotype in self.cargo.items():
             for i, gen in enumerate(genotype):
                 if rn.random() < probability:
+                    self.changed = True
                     if self.cargo[dim][i] == 0:
                         self.cargo[dim][i] = 1
                     else:
@@ -107,4 +110,10 @@ class binary_string:
                     break
         elif crossover_type is "empty":
             self_copy = rn.choice([self_copy,copy.deepcopy(other)])
+
+        for var,val in self.cargo.items():
+            if (val != self_copy.cargo[var]).all():
+                self_copy.changed = True
+                break
+
         return self_copy

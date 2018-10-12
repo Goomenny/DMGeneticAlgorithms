@@ -20,6 +20,7 @@ class Population:
 
         self.objective_function = objective_function
         self.individuums = []
+        self.trial_individuums = []
         self.proportionalprob = []
         self.rankprob = []
         self.parents = []
@@ -39,9 +40,12 @@ class Population:
                 self.individuums.append(binary_string(bounds=bounds))
 
 
-    def fitness(self, i):
+    def fitness(self, i, is_trial = False):
 
-        return self.individuums[i].fitness
+        if is_trial:
+            return self.trial_individuums[i].fitness
+        else:
+            return self.individuums[i].fitness
 
     def get_fitnesses(self):
 
@@ -76,7 +80,7 @@ class Population:
         return tour[best_index]
 
     def dynamic_scheme(self):
-
+        trial_individuums = []
         selection_type, size_tour = self.operators["selection"][0].split("_")
         for i, ind in enumerate(self.individuums):
 
@@ -154,11 +158,30 @@ class Population:
         self.bestInd = copy.deepcopy(self.individuums[self.i_best])
 
     def evolve(self):
-        new_individuums = [None for i in range(self.size)]
+        self.trial_individuums = [None for i in range(self.size)]
         self.i_best = rn.randint(0, self.size - 1)
-        new_individuums[self.i_best] = copy.deepcopy(self.bestInd)
+        self.trial_individuums[self.i_best] = copy.deepcopy(self.bestInd)
 
         for i,parent in enumerate(self.parents):
-            if not new_individuums[i]:
-                new_individuums[i] = parent[0].crossover(parent[1], self.operators["crossover"][i])
-        self.individuums = new_individuums
+            if not self.trial_individuums[i]:
+                self.trial_individuums[i] = parent[0].crossover(parent[1], self.operators["crossover"][i])
+        self.individuums = self.trial_individuums
+
+    def dynamic_evolve(self):
+
+        self.trial_individuums = [None for i in range(self.size)]
+
+
+        for i in range(self.size):
+            while True:
+                parent = self._getParent(self.operators["selection"][i])
+                if parent != self.individuums[i]:
+                    break
+            self.trial_individuums[i] = self.individuums[i].crossover(parent, self.operators["crossover"][i])
+
+            self.trial_individuums[i].mutate(mutation_type=self.operators["mutation"][i])
+            if self.trial_individuums[i].changed:
+                self.trial_individuums[i].calculate_fitness(self.objective_function)
+
+                if self.trial_individuums[i].fitness > self.individuums[i].fitness:
+                    self.individuums[i] = self.trial_individuums[i]

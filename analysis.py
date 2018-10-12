@@ -21,40 +21,43 @@ def reliability(func_name,x_aprox):
     mse /= x_aprox.shape[0]
     mfmin /= x_aprox.shape[0]
     return reliab, mse, mfmin, fmin
-
 path = "E:/stats_np3/"
+
 pfiles = os.listdir(path)
 for pfunc in pfiles:
     pdims = os.listdir(path+pfunc+"/")
 
     for pdim in pdims:
-        pparams = os.listdir(path + pfunc+"/"+pdim+"/")
-        fig = plt.figure()
-        plt.title(pfunc + "/" + pdim)
-        # try:
-        #     os.makedirs("E:/stats_np2/" + pfunc + "/" + pdim + "/")
-        # except:
-        #     pass
-        for pparam in pparams:
+        if pdim == "5d":
+            pparams = os.listdir(path + pfunc+"/"+pdim+"/")
+            # fig = plt.figure()
+            # plt.title(pfunc + "/" + pdim)
+            # try:
+            #     os.makedirs("E:/stats_np2/" + pfunc + "/" + pdim + "/")
+            # except:
+            #     pass
+            for pparam in pparams:
 
-            with np.load(path + pfunc+"/"+pdim+"/"+pparam, 'r') as data:
-                #stats= pickle.load(data)
-                fitnesses = data["fit"]
-                x = data["sol"]
-            # fitnesses = np.array(stats["fit"])
-            # x_sol = np.array( [[ [x for x in sol.values()] for sol in iter] for iter in stats["x"]])
+                with np.load(path + pfunc+"/"+pdim+"/"+pparam, 'r') as data:
+                    #stats= pickle.load(data)
+                    fitnesses = data["fit"]
+                    x = data["sol"]
+                    # fitnesses = np.array(stats["fit"])
+                    # x_sol = np.array( [[ [x for x in sol.values()] for sol in iter] for iter in stats["x"]])
+                    # try:
+                    #     np.savez("E:/stats_np3/" + pfunc+"/"+pdim+"/"+"ga#standard#selfconfiguration",fit=fitnesses,sol=x)
+                    # except:
+                    #     print("Ошибка")
+                    # print("E:/stats_np3/" + pfunc+"/"+pdim+"/"+"ga#standard#selfconfiguration", "saved")
+                    try:
+                        print(pfunc+ " " + pdim,pparam,reliability(pfunc,x))
+                    except:
+                        print(pfunc+ " " + pdim,pparam,"ошибка")
 
-            # np.savez("E:/stats_np2/" + pfunc+"/"+pdim+"/"+pparam.split(".")[0],fit=fitnesses,sol=x_sol)
-            # print(pfunc + " " + pdim, pparam, "saved")
-            try:
-                print(pfunc+ " " + pdim,pparam,reliability(pfunc,x))
-            except:
-                print(pfunc+ " " + pdim,pparam,"ошибка")
-
-        #     plt.plot(np.max(fitnesses, 2).mean(0),label = pparam)
-        # plt.legend(loc='upper center', bbox_to_anchor=(0.5, 0.1), shadow=True, ncol=1)
-        # plt.grid()
-        # plt.show()
+            #         plt.plot(np.max(fitnesses, 2).mean(0),label = pparam)
+            # plt.legend(loc='upper center', bbox_to_anchor=(0.5, 0.1), shadow=True, ncol=1)
+            # plt.grid()
+            # plt.show()
 
 
 # with open("E:/stats/schwefel/5d/dynamic#tournament_2#two_point#weak_stats.pickle", 'rb') as f:
