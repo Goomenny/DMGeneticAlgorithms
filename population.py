@@ -38,6 +38,7 @@ class Population:
         elif algorithm is "ga":
             for i in range(self.size):
                 self.individuums.append(binary_string(bounds=bounds))
+                self.trial_individuums.append(binary_string(bounds=bounds))
 
 
     def fitness(self, i, is_trial = False):
@@ -158,18 +159,17 @@ class Population:
         self.bestInd = copy.deepcopy(self.individuums[self.i_best])
 
     def evolve(self):
-        self.trial_individuums = [None for i in range(self.size)]
+        #self.trial_individuums = [None for i in range(self.size)]
         self.i_best = rn.randint(0, self.size - 1)
         self.trial_individuums[self.i_best] = copy.deepcopy(self.bestInd)
 
         for i,parent in enumerate(self.parents):
-            if not self.trial_individuums[i]:
-                self.trial_individuums[i] = parent[0].crossover(parent[1], self.operators["crossover"][i])
-        self.individuums = self.trial_individuums
-
+            if self.i_best != i:#not self.trial_individuums[i]:
+                self.trial_individuums[i] = parent[0].crossover(parent[1], self.operators["crossover"][i],self.trial_individuums[i])
+        self.individuums,self.trial_individuums = self.trial_individuums, self.individuums
     def dynamic_evolve(self):
 
-        self.trial_individuums = [None for i in range(self.size)]
+        #self.trial_individuums = [None for i in range(self.size)]
 
 
         for i in range(self.size):
@@ -177,11 +177,12 @@ class Population:
                 parent = self._getParent(self.operators["selection"][i])
                 if parent != self.individuums[i]:
                     break
-            self.trial_individuums[i] = self.individuums[i].crossover(parent, self.operators["crossover"][i])
+            self.trial_individuums[i] = self.individuums[i].crossover(parent, self.operators["crossover"][i],self.trial_individuums[i])
 
             self.trial_individuums[i].mutate(mutation_type=self.operators["mutation"][i])
             if self.trial_individuums[i].changed:
                 self.trial_individuums[i].calculate_fitness(self.objective_function)
 
                 if self.trial_individuums[i].fitness > self.individuums[i].fitness:
-                    self.individuums[i] = self.trial_individuums[i]
+                    self.individuums[i].copy(self.trial_individuums[i])
+

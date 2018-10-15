@@ -53,7 +53,7 @@ class Test:
 
     def do_test(self,obj_func,bounds):
 
-        path = "E:/stats_np3/"+obj_func.__name__+"/"+str(len(bounds))+"d"
+        path = "E:/stats_np4/"+obj_func.__name__+"/"+str(len(bounds))+"d"
 
         try:
             os.makedirs(path)
@@ -62,7 +62,8 @@ class Test:
         else:
             print("Успешно создана директория %s" % path)
 
-        params = [["dynamic",True,"tournament_9","one_point","weak"]]
+        params = [["dynamic",True,"tournament_9","one_point","weak"],
+                  ["standard", True, "tournament_9", "one_point", "weak"]]
 
         for param in params:
             fit = []

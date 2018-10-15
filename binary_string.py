@@ -26,6 +26,12 @@ class binary_string:
     def __str__(self):
         return str(self.get_result())
 
+    def copy(self,other):
+        for x in self.cargo:
+
+            self.cargo[x] = other.cargo[x].copy()
+        self.fitness = other.fitness
+
     def calculate_result(self):
         for dim,genotype in self.cargo.items():
             summa = 0
@@ -62,14 +68,18 @@ class binary_string:
                         self.cargo[dim][i] = 0
 
 
-    def crossover(self, other, crossover_type="two_point"):
-        self_copy = copy.deepcopy(self)
+    def crossover(self, other, crossover_type="two_point",self_copy = None):
+        if not self_copy:
+            self_copy = copy.deepcopy(self)
+        self_copy.fitness=self.fitness
 
         if crossover_type is "standard":
             for dim, genotype in self.cargo.items():
                 for i, gen in enumerate(genotype):
-                    if rn.choice([True,False]):
+                    if rn.random() < 0.5:
                         self_copy.cargo[dim][i] = other.cargo[dim][i]
+                    else:
+                        self_copy.cargo[dim][i] = self.cargo[dim][i]
         elif crossover_type is "one_point":
             point_var = rn.choice(list(self.cargo.keys()))
             point_gen = rn.choice([i+1 for i in range(len(self.cargo[point_var])-1)])
@@ -78,11 +88,11 @@ class binary_string:
                 for i, gen in enumerate(genotype):
                     if point_var is dim and point_gen is i:
                         flag = True
-                        break
-                    else:
+                    elif flag:
                         self_copy.cargo[dim][i] = other.cargo[dim][i]
-                if flag:
-                    break
+                    else:
+                        self_copy.cargo[dim][i] = self.cargo[dim][i]
+
         elif crossover_type is "two_point":
             point_var = rn.choice(list(self.cargo.keys()))
             point_gen = rn.choice([i + 1 for i in range(len(self.cargo[point_var]) - 1)])
@@ -101,13 +111,13 @@ class binary_string:
 
                         if flag:
                             second_flag = True
-                            break
+                            flag = False
                         elif not flag: flag = True
 
                     if flag:
                         self_copy.cargo[dim][i] = other.cargo[dim][i]
-                if second_flag:
-                    break
+                    else:
+                        self_copy.cargo[dim][i] = self.cargo[dim][i]
         elif crossover_type is "empty":
             self_copy = rn.choice([self_copy,copy.deepcopy(other)])
 

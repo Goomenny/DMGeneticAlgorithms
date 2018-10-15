@@ -319,7 +319,7 @@ sum2._min         = 0
 trid._min         = ["-dim**2", "dim**2"]  # fmin -50 6d, -200 10d
 zakharov._min     = 0
 
-ellipse._min      =  0
+ellipse._min      =  1
 
 nesterov._min     = 1 #?
 
@@ -352,6 +352,10 @@ def getbounds( funcname, dim ):
 
 def getminpoint(name, dim=0):
     if name == "perm":
+        return [i+1 for i in range(dim)]
+    elif name == "dixonprice":
+        return [2**(-(2**(i+1)-2)/2**(i+1)) for i in range(dim)]
+    elif name == "powersum":
         return [i+1 for i in range(dim)]
     return [name_to_func[name]._min for i in range(dim)]
 

@@ -1,7 +1,6 @@
 import math
 import random as rn
 import numpy as np
-
 import testfuncs_semenkina
 edge =  math.pi
 data_size = 300
