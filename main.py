@@ -30,9 +30,12 @@ if __name__ == '__main__':
     # gp = GeneticProgramming(objective_function=objective_function,variables=variables)
 
     test =  tests.Test()
-    dims = [2]
-    allfuncnames = tfunc.funcnames_minus()
-    allfuncs = [problem(func) for func in tfunc.getfuncs("ackley dixonprice griewank")]#tfunc.allfuncs_minus()]
+    dims = [10]
+    #allfuncnames = tfunc.funcnames_minus()
+    #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
+
+    allfuncs = [problem(func) for func in tfunc.getfuncs(names="levy rastrigin")]
+
     allbounds = []
     for dim in dims:
         allbounds += [[tuple(tfunc.getbounds(func.__name__,dim)) for d in range(dim)] for func in allfuncs]
@@ -60,7 +63,7 @@ if __name__ == '__main__':
     #                       type_selection="tournament_9",
     #                       type_crossover="two_point",
     #                       type_mutation="weak",
-    #                       nprint=1)
+    #                       nprint=100)
     # t1=time.time()
     # ga.run()
     # print(time.time()-t1)

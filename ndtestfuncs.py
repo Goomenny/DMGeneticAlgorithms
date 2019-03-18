@@ -360,7 +360,7 @@ def getminpoint(name, dim=0):
     return [name_to_func[name]._min for i in range(dim)]
 
 #...............................................................................
-_minus = "michalewicz trid perm saddle sphere"   # nlopt ~ same ?
+_minus = "michalewicz trid perm saddle sphere powersum"   # nlopt ~ same ?
 
 def allfuncs_minus( minus=_minus ):
     return [f for f in allfuncs

@@ -68,12 +68,11 @@ class Population:
 
     def tournamentSelection(self,size_tour):
 
-        indexes = [i for i in range(self.size)]
-        rn.shuffle(indexes)
+        indexes = rn.sample(range(self.size), k=size_tour)
         tour = []
 
-        for i in range(size_tour):
-            tour.append(self.individuums[indexes.pop()])
+        for i in indexes:
+            tour.append(self.individuums[i])
 
         tour_fit = [ind.fitness for ind in tour]
         best_index = tour_fit.index(max(tour_fit))

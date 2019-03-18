@@ -15,7 +15,7 @@ class Test:
 
     def start_parallel(self,obj_funcs,bounds):
 
-        with Pool(processes=8) as pool:
+        with Pool(processes=2) as pool:
             # self.fitnesses=pool.map(self.objective_function,[ind.get_result for ind in self.individuums])
             multiple_results = [pool.apply_async(self.do_test, (obj_func,bound,)) for obj_func,bound in zip(obj_funcs,bounds)]
             for res in multiple_results:
@@ -53,7 +53,7 @@ class Test:
 
     def do_test(self,obj_func,bounds):
 
-        path = "E:/stats_np4/"+obj_func.__name__+"/"+str(len(bounds))+"d"
+        path = "E:/stats_np400800/"+obj_func.__name__+"/"+str(len(bounds))+"d"
 
         try:
             os.makedirs(path)
@@ -63,7 +63,8 @@ class Test:
             print("Успешно создана директория %s" % path)
 
         params = [["dynamic",True,"tournament_9","one_point","weak"],
-                  ["standard", True, "tournament_9", "one_point", "weak"]]
+                  ["standard", True, "tournament_9", "one_point", "weak"]
+                  ]
 
         for param in params:
             fit = []
@@ -74,8 +75,8 @@ class Test:
                                       bounds=bounds,
                                       selfconfiguration=param[1],
                                       scheme=param[0],
-                                      size_of_population=100,
-                                      iterations=300,
+                                      size_of_population=400,
+                                      iterations=800,
                                       type_selection=param[2],
                                       type_crossover=param[3],
                                       type_mutation=param[4],

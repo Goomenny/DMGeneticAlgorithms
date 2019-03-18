@@ -7,7 +7,9 @@ from sklearn.metrics import mean_squared_error
 from ndtestfuncs import getminpoint,name_to_func
 from math import fabs
 def reliability(func_name,x_aprox):
-    reliab = [0,0,0,0,0,0,0]
+    step = 50
+    n = int(x_aprox.shape[1] / step)
+    reliab = [0]*(n+1)
     mse = 0
     mfmin = 0
     minpoint = getminpoint(func_name,x_aprox.shape[-1])
@@ -15,37 +17,22 @@ def reliability(func_name,x_aprox):
     # if func_name == "ellipse" and x_aprox.shape[-1]==2:
     #         print("f")
     for iter in x_aprox:
+        for i in range(n):
+            if (abs(minpoint - iter[i*step]) < 0.01).all():
+                reliab[i] += 1
         if (abs(minpoint - iter[-1]) < 0.01).all():
-            reliab[6] += 1
-        if (abs(minpoint - iter[250]) < 0.01).all():
-            reliab[5] += 1
-        if (abs(minpoint - iter[200]) < 0.01).all():
-            reliab[4] += 1
-        if (abs(minpoint - iter[150]) < 0.01).all():
-            reliab[3] += 1
-        if (abs(minpoint - iter[100]) < 0.01).all():
-            reliab[2] += 1
-        if (abs(minpoint - iter[50]) < 0.01).all():
-            reliab[1] += 1
-        if (abs(minpoint - iter[0]) < 0.01).all():
-            reliab[0] += 1
+            reliab[-1] += 1
 
         mse += mean_squared_error(iter[-1],minpoint)
         mfmin += name_to_func[func_name](iter[-1])
-    reliab[0] /= x_aprox.shape[0]
-    reliab[1] /= x_aprox.shape[0]
-    reliab[2] /= x_aprox.shape[0]
-    reliab[3] /= x_aprox.shape[0]
-    reliab[4] /= x_aprox.shape[0]
-    reliab[5] /= x_aprox.shape[0]
-    reliab[6] /= x_aprox.shape[0]
+    reliab = [r/ x_aprox.shape[0] for r in reliab ]
     mse /= x_aprox.shape[0]
     mfmin /= x_aprox.shape[0]
     return reliab, mse, mfmin, fmin
 def pltfigures():
-    path = "E:/stats_np4/"
-
+    path = "E:/stats_np400800/"
     pfiles = os.listdir(path)
+
     for pfunc in pfiles:
         pdims = os.listdir(path+pfunc+"/")
         if "powersum" not in pfunc:
@@ -77,40 +64,43 @@ def pltfigures():
                             # except:
                             #     print("Ошибка")
                             # print("E:/stats_np3/" + pfunc+"/"+pdim+"/"+"ga#standard#selfconfiguration", "saved")
-                            # try:
-                            #     reliab, mse, mfmin, fmin = reliability(pfunc, x)
-                            #     print(pfunc+ " " + pdim,pparam,"reliab",reliab,"mse %f" %mse,"mfmin %f"%mfmin, "fmin %f" %fmin)
-                            # except:
-                            #     print(pfunc+ " " + pdim,pparam,"ошибка")
+                            reliab = []
+                            try:
+                                reliab, mse, mfmin, fmin = reliability(pfunc, x)
+                                print(pfunc+ " " + pdim,pparam,"reliab",reliab,"mse %f" %mse,"mfmin %f"%mfmin, "fmin %f" %fmin)
+                            except:
+                                print(pfunc+ " " + pdim,pparam,"ошибка")
                             color , linestyle = 'b', '--'
                             if "dynamic" in pparam:
                                 color, linestyle = 'r', ':'
                             pparam = pparam.replace("ga#","").replace("dynamic","best replacement").replace("notselfconf#","").replace("#","/").replace(".npz","")
 
-                            ax[pdim].plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).mean(0), label=pparam,color = color,linestyle=linestyle)
+                            #ax[pdim].plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).mean(0), label=pparam,color = color,linestyle=linestyle)
+                            ax[pdim].plot( np.array([i*50 for i in range(len(reliab))]),np.array(reliab) ,label=pparam, color=color, linestyle=linestyle)
+                            #ax[pdim].plot(,np.array(reliab), label=pparam, color=color, linestyle=linestyle)
                             chartBox = ax[pdim].get_position()
                             ax[pdim].set_position([chartBox.x0, chartBox.y0, chartBox.width, chartBox.height])
                             # if "standard" in pparam:
-                            #     #plt.plot(np.max(fitnesses, 2).T,color='b')
-                            #     plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='b')
+                            #     plt.plot(np.max(fitnesses, 2).T,color='b')
+                            #     # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='b')
                             #
                             # elif "dynamic" in pparam:
-                            #     plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='r')
-                            #     #plt.plot(np.max(fitnesses, 2).T, color='r')
+                            #     # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='r')
+                            #     plt.plot(np.max(fitnesses, 2).T, color='r')
                 plt.grid()
-                plt.semilogy()
-                plt.ylabel('f (x)')
+                #plt.semilogy()
+                plt.ylabel('reliability')
                 plt.xlabel('population')
 
             plt.legend(loc='center left', bbox_to_anchor=(1.05, 0.5), ncol=1)
             #plt.subplots_adjust(hspace=0.55,wspace=0.4)
             fig.tight_layout()
 
-            fig.savefig('D:/YandexDisk/учеба/IWMMA/2018/%s.png' %pfunc)
-            #plt.show()
+            # fig.savefig('D:/YandexDisk/учеба/IWMMA/2018/300i600p_%s.png' %pfunc)
+            plt.show()
 
 def pltreliability():
-    path = "E:/stats_np3/"
+    path = "E:/stats_notself/"
 
     pfiles = os.listdir(path)
     for pfunc in pfiles:
