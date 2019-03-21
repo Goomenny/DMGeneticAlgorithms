@@ -18,7 +18,6 @@ class Keras_Tree(Tree):
                  variables = None):
         super().__init__(max_depth, growth, variables)
         self.root = Keras_Node(deep=0, node_type=True, max_depth=self.max_depth, variables=self.variables, growth=growth)
-        self.model = None
 
 
     def compile(self,var):
@@ -41,11 +40,11 @@ class Keras_Tree(Tree):
                 layers.append(map_layers[layer_conf[0]](layer_conf[1], activation=layer_conf[2], return_sequences=return_seq)(layers[-1]))
                 number_rnns -= 1
         layers.append(Dense(46, activation='softmax')(layers[-1]))
-        self.model = Model(inputs=layers[0], outputs=layers[-1])
+        model = Model(inputs=layers[0], outputs=layers[-1])
 
-        self.model.compile(optimizer='Adagrad', loss='categorical_crossentropy', metrics=['acc'])
-        self.model.summary()
-        return self.model
+        model.compile(optimizer='Adagrad', loss='categorical_crossentropy', metrics=['acc'])
+        model.summary()
+        return model
 
 
     def get_result(self, var):
