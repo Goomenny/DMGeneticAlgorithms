@@ -15,7 +15,7 @@ class GeneticAlgorithm:
                  type_selection = None,
                  type_crossover = None,
                  type_mutation = None,
-                 scheme = "dynamic"):
+                 scheme = "standard"):
         self.scheme = scheme
         self.algorithm = algorithm
         self.selfconfiguration = selfconfiguration
@@ -59,6 +59,7 @@ class GeneticAlgorithm:
         self.oper_stats = {operator:{type: dict(probability=[]) for type in self.operators[operator]} for operator in self.operators}
         self.oper_stats["size"] = self.iterations
         self.reset_probabilities()
+
 
     def save_selfconf_probabilities(self):
 

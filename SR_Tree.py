@@ -1,17 +1,15 @@
-from Node import Node
-import random as rn
 import copy
-
-from timeit import Timer
-class Tree:
+import random as rn
+from Tree import Tree
+from SR_Node import SR_Node
+class SR_Tree(Tree):
     def __init__(self,
                  max_depth=1,
                  growth="full",
                  variables = None):
-        self.variables = variables
-        self.max_depth = max_depth
-        self.fitness = None
-        self.changed = True
+        super().__init__(max_depth, growth, variables)
+        self.root = SR_Node(deep=0, node_type=True, max_depth=self.max_depth,variables=self.variables,growth=growth)
+
 
     def __str__(self):
         return str(self.root)
@@ -29,10 +27,8 @@ class Tree:
 
         self.fitness = 1 / (1 + obj_func(self.get_result))
 
-    def crossover(self, other, crossover_type="standard",self_copy = None):
-        if not self_copy:
-            self_copy = copy.deepcopy(self)
-        self_copy.fitness = self.fitness
+    def crossover(self, other, crossover_type="standard"):
+        self_copy = copy.deepcopy(self)
 
         if crossover_type == "standard":
             rnlayer = rn.randint(0, other.root.get_depth())
@@ -74,7 +70,7 @@ class Tree:
             rnselflayer = rn.randint(1, self.root.get_depth())
             node = rn.choice(self.root.getNodesFromLayer(rnselflayer))
 
-            mutatednode = Node(deep=0, max_depth=self.max_depth - node.deep,variables=self.variables)
+            mutatednode = SR_Node(deep=0, max_depth=self.max_depth - node.deep,variables=self.variables)
 
             node.crossover(mutatednode, deepcopy=False)
             self.changed = True
@@ -83,5 +79,3 @@ class Tree:
 
             if self.root.mutate(probability):
                 self.changed = True
-
-
