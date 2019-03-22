@@ -60,7 +60,7 @@ class Tree:
                 self_copy.changed = True
         return self_copy
 
-    def mutate(self, mutation_type = "growth",probability =None):
+    def mutate(self, mutation_type = "growth",probability =None, Node_class = None):
 
         if not probability:
             if mutation_type is "weak":
@@ -74,7 +74,7 @@ class Tree:
             rnselflayer = rn.randint(1, self.root.get_depth())
             node = rn.choice(self.root.getNodesFromLayer(rnselflayer))
 
-            mutatednode = Node(deep=0, max_depth=self.max_depth - node.deep,variables=self.variables)
+            mutatednode = Node_class(deep=0, max_depth=self.max_depth - node.deep,variables=self.variables)
 
             node.crossover(mutatednode, deepcopy=False)
             self.changed = True

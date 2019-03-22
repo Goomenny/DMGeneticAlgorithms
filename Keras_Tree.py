@@ -18,6 +18,8 @@ class Keras_Tree(Tree):
                  variables = None):
         super().__init__(max_depth, growth, variables)
         self.root = Keras_Node(deep=0, node_type=True, max_depth=self.max_depth, variables=self.variables, growth=growth)
+        while (self.root.number_rnns()<1):
+            super().mutate("strong",Node_class=Keras_Node)
 
 
     def compile(self,var):
@@ -51,25 +53,6 @@ class Keras_Tree(Tree):
         return self.compile(var)
 
     def mutate(self, mutation_type = "growth",probability =None):
-
-        if not probability:
-            if mutation_type is "weak":
-                probability = 1/(5*self.get_depth())
-            elif mutation_type is "standard":
-                probability = 1 / self.get_depth()
-            elif mutation_type is "strong":
-                probability = 5 / self.get_depth()
-
-        if mutation_type is "growth":
-            rnselflayer = rn.randint(1, self.root.get_depth())
-            node = rn.choice(self.root.getNodesFromLayer(rnselflayer))
-
-            mutatednode = Keras_Node(deep=0, max_depth=self.max_depth - node.deep,variables=self.variables)
-
-            node.crossover(mutatednode, deepcopy=False)
-            self.changed = True
-
-        elif mutation_type in ("weak","standard","strong"):
-
-            if self.root.mutate(probability):
-                self.changed = True
+        super().mutate(mutation_type,probability,Keras_Node)
+        while (self.root.number_rnns()<1):
+            super().mutate("strong",node=Keras_Node)
