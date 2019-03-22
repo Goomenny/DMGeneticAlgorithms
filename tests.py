@@ -15,7 +15,7 @@ class Test:
 
     def start_parallel(self,obj_funcs,bounds):
 
-        with Pool(processes=2) as pool:
+        with Pool(processes=1) as pool:
             # self.fitnesses=pool.map(self.objective_function,[ind.get_result for ind in self.individuums])
             multiple_results = [pool.apply_async(self.do_test, (obj_func,bound,)) for obj_func,bound in zip(obj_funcs,bounds)]
             for res in multiple_results:
