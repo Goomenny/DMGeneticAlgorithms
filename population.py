@@ -67,17 +67,19 @@ class Population:
             self.rankprob[index] = 2.0 * (i + 1) / (self.size * (self.size + 1))
 
     def tournamentSelection(self,size_tour):
+        indexes = []
+        #indexes = rn.sample(range(self.size), k=size_tour)
 
-        indexes = rn.sample(range(self.size), k=size_tour)
-        tour = []
+        while len(indexes) < size_tour:
+            rand = rn.randint(0,self.size-1)
+            if rand not in indexes:
+                indexes.append(rand)
+        #tour = [self.individuums[i] for i in indexes]
 
-        for i in indexes:
-            tour.append(self.individuums[i])
-
-        tour_fit = [ind.fitness for ind in tour]
+        tour_fit = [self.individuums[i].fitness for i in indexes]
         best_index = tour_fit.index(max(tour_fit))
 
-        return tour[best_index]
+        return self.individuums[indexes[best_index]]
 
     def dynamic_scheme(self):
         trial_individuums = []
