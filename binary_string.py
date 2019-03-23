@@ -35,7 +35,7 @@ class binary_string:
 
     def calculate_result(self):
         for dim,n in self.N.items():
-            summa = sum(self.cargo[n[1]-n[0]:n[1]] * 2 ** np.arange(n[0]))
+            summa = (self.cargo[n[1]-n[0]:n[1]] * 2 ** np.arange(n[0])).sum()
             self.dec[dim] = self.bounds[dim][0]+summa*self.E[dim]*0.1
 
 
