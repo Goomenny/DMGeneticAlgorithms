@@ -34,15 +34,16 @@ if __name__ == '__main__':
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
 
-    allfuncs = [problem(func) for func in tfunc.getfuncs(names="levy rastrigin")]
+    allfuncs = [problem(func) for func in tfunc.getfuncs(names="ackley")]
 
     allbounds = []
     for dim in dims:
         allbounds += [[tuple(tfunc.getbounds(func.__name__,dim)) for d in range(dim)] for func in allfuncs]
     allfuncs *=len(dims)
 
-
+    t1=time.time()
     test.start_parallel(allfuncs,allbounds)
+    print(time.time()-t1)
     # gp = genalgorithm.GeneticAlgorithm(algorithm="gp",
     #                                    objective_function=pr.objective_function,
     #                                    variables=pr.variables,
