@@ -30,11 +30,11 @@ if __name__ == '__main__':
     # gp = GeneticProgramming(objective_function=objective_function,variables=variables)
 
     test =  tests.Test()
-    dims = [10]
+    dims = [3]
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
 
-    allfuncs = [problem(func) for func in tfunc.getfuncs(names="ackley")]
+    allfuncs = [problem(func) for func in tfunc.getfuncs(names="ackley schwefel")]
 
     allbounds = []
     for dim in dims:
@@ -58,13 +58,13 @@ if __name__ == '__main__':
     #                       objective_function=allfuncs[0],
     #                       bounds=allbounds[0],
     #                       selfconfiguration=True,
-    #                       scheme="dynamic",
-    #                       size_of_population=100,
-    #                       iterations=300,
+    #                       scheme="standard",
+    #                       size_of_population=400,
+    #                       iterations=800,
     #                       type_selection="tournament_9",
-    #                       type_crossover="two_point",
+    #                       type_crossover="one_point",
     #                       type_mutation="weak",
-    #                       nprint=100)
+    #                       nprint=49)
     # t1=time.time()
     # ga.run()
     # print(time.time()-t1)
