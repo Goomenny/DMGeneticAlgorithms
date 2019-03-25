@@ -34,7 +34,7 @@ if __name__ == '__main__':
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
 
-    allfuncs = [problem(func) for func in tfunc.getfuncs(names="ackley schwefel")]
+    allfuncs = [problem(func) for func in tfunc.getfuncs(names="schwefel")]
 
     allbounds = []
     for dim in dims:

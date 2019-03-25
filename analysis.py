@@ -30,7 +30,7 @@ def reliability(func_name,x_aprox):
     mfmin /= x_aprox.shape[0]
     return reliab, mse, mfmin, fmin
 def pltfigures():
-    path = "E:/stats_np400800/"
+    path = "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np400800/"
     pfiles = os.listdir(path)
 
     for pfunc in pfiles:
@@ -93,9 +93,9 @@ def pltfigures():
                 plt.xlabel('population')
 
             plt.legend(loc='center left', bbox_to_anchor=(1.05, 0.5), ncol=1)
-            #plt.subplots_adjust(hspace=0.55,wspace=0.4)
-            fig.tight_layout()
 
+            fig.tight_layout()
+            plt.subplots_adjust(wspace=0.07)
             # fig.savefig('D:/YandexDisk/учеба/IWMMA/2018/300i600p_%s.png' %pfunc)
             plt.show()
 
