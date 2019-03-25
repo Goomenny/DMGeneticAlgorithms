@@ -8,7 +8,7 @@ import problem
 # path = os.getcwd()
 # print ("Текущая рабочая директория %s" % path)
 class Test:
-    def __init__(self, runs = 1):
+    def __init__(self, runs = 100):
 
         self.runs = runs
 
