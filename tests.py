@@ -31,7 +31,7 @@ class Test:
                                   selfconfiguration=param[1],
                                   scheme=param[0],
                                   size_of_population=600,
-                                  iterations=1000,
+                                  iterations=600,
                                   type_selection=param[2],
                                   type_crossover=param[3],
                                   type_mutation=param[4],
@@ -39,7 +39,7 @@ class Test:
             ga.run()
             fit.append(ga.fit_stats)
             x.append(ga.x_stats)
-
+            print(param[0],run)
         fit = np.array(fit)
         x = np.array(x)
         np.savez(path + "/" + ga.name, fit=fit, sol=x)
@@ -53,7 +53,7 @@ class Test:
                   ]
         for obj_func, bound in zip(obj_funcs, bounds):
 
-            path = "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np6001000/"+obj_func.__name__+"/"+str(len(bound))+"d"
+            path = "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np600600/"+obj_func.__name__+"/"+str(len(bound))+"d"
             try:
                 os.makedirs(path)
             except OSError:

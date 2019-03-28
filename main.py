@@ -34,7 +34,7 @@ if __name__ == '__main__':
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
 
-    allfuncs = [problem(func) for func in tfunc.getfuncs(names="schwefel")]
+    allfuncs = [problem(func) for func in tfunc.getfuncs(names="zakharov")]
 
     allbounds = []
     for dim in dims:
@@ -58,13 +58,13 @@ if __name__ == '__main__':
     #                       objective_function=allfuncs[0],
     #                       bounds=allbounds[0],
     #                       selfconfiguration=True,
-    #                       scheme="standard",
-    #                       size_of_population=400,
-    #                       iterations=800,
+    #                       scheme="dynamic",
+    #                       size_of_population=100,
+    #                       iterations=300,
     #                       type_selection="tournament_9",
-    #                       type_crossover="one_point",
+    #                       type_crossover="two_point",
     #                       type_mutation="weak",
-    #                       nprint=49)
+    #                       nprint=100)
     # t1=time.time()
     # ga.run()
     # print(time.time()-t1)
