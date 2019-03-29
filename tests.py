@@ -8,7 +8,7 @@ import problem
 # path = os.getcwd()
 # print ("Текущая рабочая директория %s" % path)
 class Test:
-    def __init__(self, runs = 100):
+    def __init__(self, runs = 10):
 
         self.runs = runs
 
@@ -30,8 +30,8 @@ class Test:
                                   bounds=bounds,
                                   selfconfiguration=param[1],
                                   scheme=param[0],
-                                  size_of_population=600,
-                                  iterations=600,
+                                  size_of_population=1000,
+                                  iterations=1000,
                                   type_selection=param[2],
                                   type_crossover=param[3],
                                   type_mutation=param[4],
@@ -53,7 +53,7 @@ class Test:
                   ]
         for obj_func, bound in zip(obj_funcs, bounds):
 
-            path = "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np600600/"+obj_func.__name__+"/"+str(len(bound))+"d"
+            path = "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np10001000/"+obj_func.__name__+"/"+str(len(bound))+"d"
             try:
                 os.makedirs(path)
             except OSError:
