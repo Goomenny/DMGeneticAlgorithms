@@ -8,7 +8,7 @@ import problem
 # path = os.getcwd()
 # print ("Текущая рабочая директория %s" % path)
 class Test:
-    def __init__(self, runs = 10):
+    def __init__(self, runs = 100):
 
         self.runs = runs
 
@@ -31,7 +31,7 @@ class Test:
                                   selfconfiguration=param[1],
                                   scheme=param[0],
                                   size_of_population=1000,
-                                  iterations=1000,
+                                  iterations=600,
                                   type_selection=param[2],
                                   type_crossover=param[3],
                                   type_mutation=param[4],
@@ -66,7 +66,7 @@ class Test:
 
 
 
-        with Pool(processes=4) as pool:
+        with Pool(processes=2) as pool:
             multiple_results = [pool.apply_async(self.do_test, parameters) for parameters in all_combinations]
             for res in multiple_results:
                 res.get()
