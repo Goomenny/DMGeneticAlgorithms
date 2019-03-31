@@ -11,7 +11,7 @@ class Test:
     def __init__(self, runs = 10):
 
         self.runs = runs
-        self.size_of_population = 600
+        self.size_of_population = 1000
         self.iterations = 600
 
 
