@@ -68,7 +68,7 @@ class Test:
 
 
 
-        with Pool(processes=2) as pool:
+        with Pool(processes=4) as pool:
             multiple_results = [pool.apply_async(self.do_test, parameters) for parameters in all_combinations]
             for res in multiple_results:
                 res.get()
