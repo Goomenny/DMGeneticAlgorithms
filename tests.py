@@ -11,8 +11,8 @@ class Test:
     def __init__(self, runs = 100):
 
         self.runs = runs
-        self.size_of_population = 100
-        self.iterations = 100
+        self.size_of_population = 300
+        self.iterations = 600
 
 
     def start_parallel1(self,obj_funcs,bounds):
