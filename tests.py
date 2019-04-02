@@ -50,8 +50,8 @@ class Test:
 
     def start_parallel(self,obj_funcs,bounds):
         all_combinations = []
-        params = [["dynamic", True, "tournament_9", "one_point", "weak"],
-                  ["standard", True, "tournament_9", "one_point", "weak"]
+        params = [["dynamic", False, "tournament_9", "standard", "weak"],
+                  ["standard", False, "tournament_9", "standard", "weak"]
                   ]
         for obj_func, bound in zip(obj_funcs, bounds):
 
@@ -68,7 +68,7 @@ class Test:
 
 
 
-        with Pool(processes=2) as pool:
+        with Pool(processes=4) as pool:
             multiple_results = [pool.apply_async(self.do_test, parameters) for parameters in all_combinations]
             for res in multiple_results:
                 res.get()

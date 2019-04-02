@@ -30,11 +30,11 @@ if __name__ == '__main__':
     # gp = GeneticProgramming(objective_function=objective_function,variables=variables)
 
     test =  tests.Test()
-    dims = [7]
+    dims = [2]
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
 
-    allfuncs = [problem(func) for func in tfunc.getfuncs(names="schwefel")]
+    allfuncs = [problem(func) for func in tfunc.getfuncs(names="ackley levy rastrigin")]
 
     allbounds = []
     for dim in dims:
