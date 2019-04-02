@@ -51,11 +51,11 @@ class binary_string:
     def mutate(self, mutation_type="standard", probability=None):
 
         if not probability:
-            if mutation_type is "weak":
+            if mutation_type == "weak":
                 probability = 1/(5*self.size)
-            elif mutation_type is "standard":
+            elif mutation_type == "standard":
                 probability = 1 / self.size
-            elif mutation_type is "strong":
+            elif mutation_type == "strong":
                 probability = 5 / self.size
 
         mask = np.random.random((self.size,)) < probability
