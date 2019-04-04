@@ -29,20 +29,30 @@ if __name__ == '__main__':
 
     # gp = GeneticProgramming(objective_function=objective_function,variables=variables)
 
-    test =  tests.Test()
-    dims = [7]
+    test =  tests.Test(size_of_population=300,iterations=500,runs=5)
+    dims = [3]
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
 
-    allfuncs = [problem(func) for func in tfunc.getfuncs(names="ackley levy rastrigin")]
+    allfuncs = [problem(func) for func in tfunc.getfuncs(names="ackley")]
 
     allbounds = []
     for dim in dims:
         allbounds += [[tuple(tfunc.getbounds(func.__name__,dim)) for d in range(dim)] for func in allfuncs]
     allfuncs *=len(dims)
 
+    dict_params = dict(selection=("proportional", "rank", "tournament_9", "tournament_5", "tournament_2"),
+                         mutation=("weak", "standard", "strong"),
+                         crossover=("standard", "one_point", "two_point"))
+    params = []
+    for selection in dict_params["selection"]:
+        for mutation in dict_params["mutation"]:
+            for crossover in dict_params["crossover"]:
+                params.append(["dynamic", False, selection, crossover,mutation])
+                params.append(["standard", False, selection, crossover, mutation])
+
     t1=time.time()
-    test.start_parallel(allfuncs,allbounds)
+    test.start_parallel(allfuncs,allbounds,params)
     print(time.time()-t1)
     # gp = genalgorithm.GeneticAlgorithm(algorithm="gp",
     #                                    objective_function=pr.objective_function,
@@ -57,17 +67,24 @@ if __name__ == '__main__':
     # ga = genalgorithm.GeneticAlgorithm(algorithm="ga",
     #                       objective_function=allfuncs[0],
     #                       bounds=allbounds[0],
-    #                       selfconfiguration=True,
+    #                       selfconfiguration=False,
     #                       scheme="dynamic",
-    #                       size_of_population=100,
+    #                       size_of_population=300,
     #                       iterations=300,
     #                       type_selection="tournament_9",
-    #                       type_crossover="two_point",
-    #                       type_mutation="weak",
+    #                       type_crossover="two-point",
+    #                       type_mutation="standard",
     #                       nprint=100)
     # t1=time.time()
     # ga.run()
     # print(time.time()-t1)
+    # minpoint = tfunc.getminpoint("ackley", dims[0])
+    # point =np.array(ga.population.bestInd.get_result())
+    # if (abs(minpoint - point) < 0.01).all():
+    #     print("Решение найдено %s"%(point))
+    # else:
+    #     print("Решение не найдено")
+
     # cProfile.run("ga.run()", sort="tottime")
     # fitnesses = ga.fit_stats
     # stats = ga.oper_stats

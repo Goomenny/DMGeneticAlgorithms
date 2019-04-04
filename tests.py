@@ -8,11 +8,11 @@ import problem
 # path = os.getcwd()
 # print ("Текущая рабочая директория %s" % path)
 class Test:
-    def __init__(self, runs = 100):
+    def __init__(self, runs = 10,size_of_population = 100,iterations = 100):
 
         self.runs = runs
-        self.size_of_population = 300
-        self.iterations = 600
+        self.size_of_population = size_of_population
+        self.iterations = iterations
 
 
     def start_parallel1(self,obj_funcs,bounds):
@@ -48,14 +48,14 @@ class Test:
         print("Успешно записан %s" % ga.name)
 
 
-    def start_parallel(self,obj_funcs,bounds):
+    def start_parallel(self,obj_funcs,bounds,params):
         all_combinations = []
-        params = [["dynamic", False, "tournament_9", "standard", "weak"],
-                  ["standard", False, "tournament_9", "standard", "weak"]
-                  ]
+        # params = [["dynamic", False, "rank", "standard", "weak"],
+        #           ["standard", False, "rank", "standard", "weak"]
+        #           ]
         for obj_func, bound in zip(obj_funcs, bounds):
 
-            path = "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np"+str(self.size_of_population)+str(self.iterations)+"/"+obj_func.__name__+"/"+str(len(bound))+"d"
+            path = "C:/Users/goome/YandexDisk/учеба/Магдип/stats_tests"+str(self.size_of_population)+str(self.iterations)+"/"+obj_func.__name__+"/"+str(len(bound))+"d"
             try:
                 os.makedirs(path)
             except OSError:
@@ -68,7 +68,7 @@ class Test:
 
 
 
-        with Pool(processes=4) as pool:
+        with Pool(processes=8) as pool:
             multiple_results = [pool.apply_async(self.do_test, parameters) for parameters in all_combinations]
             for res in multiple_results:
                 res.get()
