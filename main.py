@@ -30,7 +30,7 @@ if __name__ == '__main__':
     # gp = GeneticProgramming(objective_function=objective_function,variables=variables)
 
     test =  tests.Test(size_of_population=300,iterations=300,runs=3)
-    dims = [3]
+    dims = [7]
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
 
