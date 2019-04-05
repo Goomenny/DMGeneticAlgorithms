@@ -50,9 +50,9 @@ class Test:
 
     def start_parallel(self,obj_funcs,bounds,params):
         all_combinations = []
-        # params = [["dynamic", False, "rank", "standard", "weak"],
-        #           ["standard", False, "rank", "standard", "weak"]
-        #           ]
+        params = [["dynamic", True, "rank", "standard", "weak"],
+                  ["standard", True, "rank", "standard", "weak"]
+                  ]
         for obj_func, bound in zip(obj_funcs, bounds):
 
             path = "C:/Users/goome/YandexDisk/учеба/Магдип/stats_tests"+str(self.size_of_population)+str(self.iterations)+"/"+obj_func.__name__+"/"+str(len(bound))+"d"
