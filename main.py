@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     # gp = GeneticProgramming(objective_function=objective_function,variables=variables)
 
-    test =  tests.Test(size_of_population=2000,iterations=600,runs=5)
+    test =  tests.Test(size_of_population=2000,iterations=600,runs=50)
     dims = [10]
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
