@@ -29,12 +29,12 @@ if __name__ == '__main__':
 
     # gp = GeneticProgramming(objective_function=objective_function,variables=variables)
 
-    test =  tests.Test(size_of_population=100,iterations=300,runs=3)
-    dims = [7]
+    test =  tests.Test(size_of_population=1500,iterations=600,runs=5)
+    dims = [10]
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
 
-    allfuncs = [problem(func) for func in tfunc.getfuncs(names="rastrigin")]
+    allfuncs = [problem(func) for func in tfunc.getfuncs(names="schwefel")]
 
     allbounds = []
     for dim in dims:
@@ -45,11 +45,11 @@ if __name__ == '__main__':
                          mutation=("weak", "standard", "strong"),
                          crossover=("standard", "one_point", "two_point"))
     params = []
-    for selection in dict_params["selection"]:
-        for mutation in dict_params["mutation"]:
-            for crossover in dict_params["crossover"]:
-                params.append(["dynamic", False, selection, crossover,mutation])
-                params.append(["standard", False, selection, crossover, mutation])
+    # for selection in dict_params["selection"]:
+    #     for mutation in dict_params["mutation"]:
+    #         for crossover in dict_params["crossover"]:
+    #             params.append(["dynamic", False, selection, crossover,mutation])
+    #             params.append(["standard", False, selection, crossover, mutation])
     params.append(["dynamic", True, "rank", "standard", "weak"])
     params.append(["standard", True, "rank", "standard", "weak"])
     t1=time.time()
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     # ga = genalgorithm.GeneticAlgorithm(algorithm="ga",
     #                       objective_function=allfuncs[0],
     #                       bounds=allbounds[0],
-    #                       selfconfiguration=False,
+    #                       selfconfiguration=True,
     #                       scheme="dynamic",
     #                       size_of_population=300,
     #                       iterations=300,
