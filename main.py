@@ -34,7 +34,7 @@ if __name__ == '__main__':
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
 
-    allfuncs = [problem(func) for func in tfunc.getfuncs(names="ackley")]
+    allfuncs = [problem(func) for func in tfunc.getfuncs(names="rastrigin")]
 
     allbounds = []
     for dim in dims:
@@ -50,7 +50,8 @@ if __name__ == '__main__':
             for crossover in dict_params["crossover"]:
                 params.append(["dynamic", False, selection, crossover,mutation])
                 params.append(["standard", False, selection, crossover, mutation])
-
+    params.append(["dynamic", True, "rank", "standard", "weak"])
+    params.append(["standard", True, "rank", "standard", "weak"])
     t1=time.time()
     test.start_parallel(allfuncs,allbounds,params)
     print(time.time()-t1)
