@@ -1,4 +1,4 @@
-from Node import Node, OPERATORS, rncargo
+from Node import Node
 import random as rn
 import copy
 
@@ -10,7 +10,6 @@ class Tree:
                  variables = None):
         self.variables = variables
         self.max_depth = max_depth
-        self.root = Node(deep=0, node_type=True, max_depth=self.max_depth,variables=self.variables,growth=growth)
         self.fitness = None
         self.changed = True
 
@@ -30,8 +29,10 @@ class Tree:
 
         self.fitness = 1 / (1 + obj_func(self.get_result))
 
-    def crossover(self, other, crossover_type="standard"):
-        self_copy = copy.deepcopy(self)
+    def crossover(self, other, crossover_type="standard",self_copy = None):
+        if not self_copy:
+            self_copy = copy.deepcopy(self)
+        self_copy.fitness = self.fitness
 
         if crossover_type == "standard":
             rnlayer = rn.randint(0, other.root.get_depth())
@@ -59,7 +60,7 @@ class Tree:
                 self_copy.changed = True
         return self_copy
 
-    def mutate(self, mutation_type = "growth",probability =None):
+    def mutate(self, mutation_type = "growth",probability =None, Node_class = None):
 
         if not probability:
             if mutation_type is "weak":
@@ -73,7 +74,7 @@ class Tree:
             rnselflayer = rn.randint(1, self.root.get_depth())
             node = rn.choice(self.root.getNodesFromLayer(rnselflayer))
 
-            mutatednode = Node(deep=0, max_depth=self.max_depth - node.deep,variables=self.variables)
+            mutatednode = Node_class(deep=0, max_depth=self.max_depth - node.deep,variables=self.variables)
 
             node.crossover(mutatednode, deepcopy=False)
             self.changed = True

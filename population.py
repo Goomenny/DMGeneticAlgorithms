@@ -1,4 +1,4 @@
-from Tree import Tree
+from Keras_Tree import Keras_Tree as Tree
 from binary_string import binary_string
 import random as rn
 import copy
@@ -34,7 +34,8 @@ class Population:
 
         if algorithm is "gp":
             for i in range(self.size):
-                self.individuums.append(Tree(max_depth=5, growth="part", variables=variables))
+                self.individuums.append(Tree(max_depth=2, growth="part", variables=variables))
+                self.trial_individuums.append(Tree(max_depth=2, growth="part", variables=variables))
         elif algorithm is "ga":
             for i in range(self.size):
                 self.individuums.append(binary_string(bounds=bounds))
