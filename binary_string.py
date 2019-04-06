@@ -72,22 +72,22 @@ class binary_string:
             self_copy = copy.deepcopy(self)
         self_copy.fitness=self.fitness
 
-        if crossover_type is "standard":
+        if crossover_type == "standard":
             mask = np.random.randint(2, size=self.size)
             self_copy.cargo = np.where(mask, self.cargo, other.cargo)
 
-        elif crossover_type is "one_point":
+        elif crossover_type == "one_point":
             point_var = rn.randint(0,self.size-1)
             self_copy.cargo = np.concatenate((self.cargo[:point_var], other.cargo[point_var:]))
 
 
-        elif crossover_type is "two_point":
+        elif crossover_type == "two_point":
             point_var = rn.sample(range(self.size-2), k=2)
             point_var.sort()
             point_var = [x+1 for x in point_var]
             self_copy.cargo = np.concatenate((self.cargo[:point_var[0]], other.cargo[point_var[0]:point_var[1]],self.cargo[point_var[1]:]))
 
-        elif crossover_type is "empty":
+        elif crossover_type == "empty":
             self_copy = rn.choice([self_copy,copy.deepcopy(other)])
 
 
