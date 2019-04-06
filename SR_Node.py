@@ -48,7 +48,7 @@ class SR_Node(Node):
         self.offspring = []
         if self.type:
             for i in range(self.arity):
-                self.offspring.append(Node(parent=self,
+                self.offspring.append(SR_Node(parent=self,
                                            deep=deep + 1,
                                            max_depth=max_depth,
                                            variables=self.variables,
@@ -117,3 +117,22 @@ class SR_Node(Node):
             if ind.mutate(probability):
                 changed = True
         return changed
+    def get_constant_nodes(self):
+        if self is None: return
+
+        arch = []
+        if self.type:
+            for node in self.offspring[:-1]:
+                offspring_layers = node.get_constant_nodes()
+                for layer in offspring_layers:
+                    arch.append(layer)
+
+            offspring_layers = self.offspring[-1].get_constant_nodes()
+            for layer in offspring_layers:
+                arch.append(layer)
+
+            return arch
+        elif not self.variable:
+            return [[self]]
+        else:
+            return []
