@@ -14,6 +14,10 @@ class SR_Tree(Tree):
     def __str__(self):
         return str(self.root)
 
+    def copy(self,other):
+        self.root= copy.deepcopy(other.root)
+        self.fitness = other.fitness
+
     def get_result(self, var):
         return self.root.evaluate(var)
 
