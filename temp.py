@@ -95,11 +95,21 @@ import random as rn
 #
 from SR_Tree import SR_Tree
 
-tr = SR_Tree(max_depth=1, growth="full")
-print(tr.root.number_rnns())
+
+def res_func(x,optim):
+    pass
+import problem as pr
+
+from scipy.optimize import minimize
+tr = SR_Tree(max_depth=2, growth="full",variables=["x0"])
+print(pr.objective_function(tr.get_result))
 print(tr.get_formula())
-tr.mutate()
-print(tr.root.number_rnns())
+optim = tr.root.get_constant_nodes()
+#optim = [tr.root.offspring[0],tr.root.offspring[1]]
+# res = minimize(rosen, x0, method='BFGS', jac=rosen_der,
+#                options={'disp': True})
+optim[0][0].cargo=0.4
+print(pr.objective_function(tr.get_result))
 print(tr.get_formula())
 # # inp = Input(shape=(32,))
 # # a = RepeatVector(3)(inp)
