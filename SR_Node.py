@@ -133,6 +133,6 @@ class SR_Node(Node):
 
             return arch
         elif not self.variable:
-            return [[self]]
+            return [self]
         else:
             return []
