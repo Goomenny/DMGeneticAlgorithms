@@ -1,6 +1,7 @@
 import numpy as np
 from multiprocessing import Pool
-from population import Population
+#from population import Population
+from SR_Population import SR_Population as Population
 import random as rn
 class GeneticAlgorithm:
     def __init__(self,
