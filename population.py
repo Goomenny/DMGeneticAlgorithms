@@ -1,4 +1,4 @@
-from Keras_Tree import Keras_Tree as Tree
+from SR_Tree import SR_Tree as Tree
 from binary_string import binary_string
 import random as rn
 import copy
@@ -34,8 +34,8 @@ class Population:
 
         if algorithm is "gp":
             for i in range(self.size):
-                self.individuums.append(Tree(max_depth=2, growth="part", variables=variables))
-                self.trial_individuums.append(Tree(max_depth=2, growth="part", variables=variables))
+                self.individuums.append(Tree(max_depth=5, growth="part", variables=variables))
+                self.trial_individuums.append(Tree(max_depth=5, growth="part", variables=variables))
         elif algorithm is "ga":
             for i in range(self.size):
                 self.individuums.append(binary_string(bounds=bounds))
@@ -141,9 +141,13 @@ class Population:
             if self.i_best != i:
                 ind.mutate(mutation_type=self.operators["mutation"][i])
 
-    def calculate_fitnesses(self):
+    def calculate_fitnesses(self,trial = False):
+        if not trial:
+            individuums = self.individuums
+        else:
+            individuums = self.trial_individuums
 
-        for ind in self.individuums:
+        for ind in individuums:
             if ind.changed:
                 ind.calculate_fitness(self.objective_function)
                 # ind.fitness = 1 / (1 + self.objective_function(ind.get_result))
@@ -182,9 +186,9 @@ class Population:
             self.trial_individuums[i] = self.individuums[i].crossover(parent, self.operators["crossover"][i],self.trial_individuums[i])
 
             self.trial_individuums[i].mutate(mutation_type=self.operators["mutation"][i])
-            if self.trial_individuums[i].changed:
-                self.trial_individuums[i].calculate_fitness(self.objective_function)
 
-                if self.trial_individuums[i].fitness > self.individuums[i].fitness:
-                    self.individuums[i].copy(self.trial_individuums[i])
+        self.calculate_fitnesses(trial=True)
+        for i in range(self.size):
+            if self.trial_individuums[i].fitness > self.individuums[i].fitness:
+                self.individuums[i].copy(self.trial_individuums[i])
 
