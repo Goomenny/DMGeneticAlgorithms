@@ -86,8 +86,12 @@ class SR_Node(Node):
             else:
                 try:
                     return OPERATORS[self.cargo][0](self.offspring[0].evaluate(var), self.offspring[1].evaluate(var))
-                except ZeroDivisionError:
-                    return 100000000
+                except RuntimeWarning:
+                    print("RunTimeWarning")
+                except RuntimeError:
+                    print("RunTimeError")
+                except:
+                    return float('inf')
         elif self.variable:
             return var[self.cargo]
         else:
