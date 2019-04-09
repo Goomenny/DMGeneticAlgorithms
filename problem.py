@@ -22,13 +22,13 @@ def objective_function(func):
     mse **= 0.5
     return mse
 
-# for i in range(data_size):
-#     var = {}
-#     for j,bound in enumerate(bounds):
-#         var["x"+str(j)]  = rn.random()*(bound[1]-bound[0])+bound[0]
-#     lvar = [x for x in var.values()]
-#     if len(lvar) ==1 :
-#         lvar = lvar[0]
-#     data.append([var,optim_func(lvar)])
+for i in range(data_size):
+    var = {}
+    for j,bound in enumerate(bounds):
+        var["x"+str(j)]  = rn.random()*(bound[1]-bound[0])+bound[0]
+    lvar = [x for x in var.values()]
+    if len(lvar) ==1 :
+        lvar = lvar[0]
+    data.append([var,optim_func(lvar)])
 
 
