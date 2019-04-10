@@ -33,7 +33,8 @@ def pltfigures():
     paths = ["C:/Users/goome/YandexDisk/учеба/Магдип/stats_np100100/",
              "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np6/",
              "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np300600/",
-             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np400800/"]
+             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np400800/",
+             "C:/Users/goome/YandexDisk/PycharmProjects/GP/GPstats_tests200200/"]
     ax = {}
     d=0
     fig = plt.figure()
@@ -41,11 +42,11 @@ def pltfigures():
         pfiles = os.listdir(path)
         for pfunc in pfiles:
             pdims = os.listdir(path+pfunc+"/")
-            if "rastrigin"  in pfunc:
+            if "myfunc"  in pfunc:
 
                 #plt.suptitle(pfunc[0].capitalize()+pfunc[1::])
                 for pdim in pdims:
-                    if "2d" == pdim and "100100" in path or "5d" == pdim and "np6" in path or "7d" == pdim and "300600" in path or "10d" == pdim and "400800" in path:
+                    if "1d" == pdim and "200200" in path or "5d" == pdim and "np6" in path or "7d" == pdim and "300600" in path or "10d" == pdim and "400800" in path:
                         pparams = os.listdir(path + pfunc+"/"+pdim+"/")
 
 
@@ -62,7 +63,7 @@ def pltfigures():
                                 with np.load(path + pfunc+"/"+pdim+"/"+pparam, 'r') as data:
                                     #stats= pickle.load(data)
                                     fitnesses = data["fit"]
-                                    x = data["sol"]
+                                    #x = data["sol"]
                                     # fitnesses = np.array(stats["fit"])
                                     # x_sol = np.array( [[ [x for x in sol.values()] for sol in iter] for iter in stats["x"]])
                                     # try:
@@ -70,29 +71,29 @@ def pltfigures():
                                     # except:
                                     #     print("Ошибка")
                                     # print("E:/stats_np3/" + pfunc+"/"+pdim+"/"+"ga#standard#selfconfiguration", "saved")
-                                    reliab = []
-                                    try:
-                                        reliab, mse, mfmin, fmin = reliability(pfunc, x)
-                                        print(pfunc+ " " + pdim,pparam,"reliab",reliab,"mse %f" %mse,"mfmin %f"%mfmin, "fmin %f" %fmin)
-                                    except:
-                                        print(pfunc+ " " + pdim,pparam,"ошибка")
-                                    color , linestyle = 'b', '--'
-                                    if "dynamic" in pparam:
-                                        color, linestyle = 'r', ':'
-                                    pparam = pparam.replace("ga#","").replace("dynamic","best replacement").replace("notselfconf#","").replace("#","/").replace(".npz","").replace("/selfconfiguration","")
-
-                                    #ax[pdim].plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).mean(0), label=pparam,color = color,linestyle=linestyle)
-                                    ax[pdim].plot( np.array([i*50 for i in range(len(reliab))]),np.array(reliab) ,label=pparam, color=color, linestyle=linestyle)
-                                    #ax[pdim].plot(,np.array(reliab), label=pparam, color=color, linestyle=linestyle)
-                                    chartBox = ax[pdim].get_position()
-                                    ax[pdim].set_position([chartBox.x0, chartBox.y0, chartBox.width, chartBox.height])
-                                    # if "standard" in pparam:
-                                    #     plt.plot(np.max(fitnesses, 2).T,color='b')
-                                    #     # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='b')
+                                    # reliab = []
+                                    # try:
+                                    #     reliab, mse, mfmin, fmin = reliability(pfunc, x)
+                                    #     print(pfunc+ " " + pdim,pparam,"reliab",reliab,"mse %f" %mse,"mfmin %f"%mfmin, "fmin %f" %fmin)
+                                    # except:
+                                    #     print(pfunc+ " " + pdim,pparam,"ошибка")
+                                    # color , linestyle = 'b', '--'
+                                    # if "dynamic" in pparam:
+                                    #     color, linestyle = 'r', ':'
+                                    # pparam = pparam.replace("ga#","").replace("dynamic","best replacement").replace("notselfconf#","").replace("#","/").replace(".npz","").replace("/selfconfiguration","")
                                     #
-                                    # elif "dynamic" in pparam:
-                                    #     # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='r')
-                                    #     plt.plot(np.max(fitnesses, 2).T, color='r')
+                                    # #ax[pdim].plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).mean(0), label=pparam,color = color,linestyle=linestyle)
+                                    # ax[pdim].plot( np.array([i*50 for i in range(len(reliab))]),np.array(reliab) ,label=pparam, color=color, linestyle=linestyle)
+                                    # #ax[pdim].plot(,np.array(reliab), label=pparam, color=color, linestyle=linestyle)
+                                    # chartBox = ax[pdim].get_position()
+                                    # ax[pdim].set_position([chartBox.x0, chartBox.y0, chartBox.width, chartBox.height])
+                                    if "standard" in pparam:
+                                        plt.plot((1/(np.max(fitnesses, 2).T).mean(axis=1)-1),color='b',label=pparam)
+                                        # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='b')
+
+                                    elif "dynamic" in pparam:
+                                        # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='r')
+                                        plt.plot((1/(np.max(fitnesses, 2).T).mean(axis=1)-1), color='r',label=pparam)
                         plt.grid()
                         #plt.semilogy()
                         plt.ylabel('reliability')
