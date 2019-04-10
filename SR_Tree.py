@@ -2,6 +2,7 @@ import copy
 import random as rn
 from Tree import Tree
 from SR_Node import SR_Node
+from SR_Tree_Optimizer import SR_Tree_Optimizer
 class SR_Tree(Tree):
     def __init__(self,
                  max_depth=1,
@@ -27,8 +28,10 @@ class SR_Tree(Tree):
     def get_depth(self):
 
         return self.root.get_depth()
-    def calculate_fitness(self, obj_func):
-
+    def calculate_fitness(self, obj_func, coefficient_optimized = False):
+        if coefficient_optimized:
+            optimizer = SR_Tree_Optimizer()
+            optimizer.optimize(self,obj_func)
         self.fitness = 1 / (1 + obj_func(self.get_result))
 
     def mutate(self, mutation_type = "standard",probability =None):
