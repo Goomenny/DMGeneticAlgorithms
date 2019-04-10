@@ -34,8 +34,8 @@ class Population:
 
         if algorithm is "gp":
             for i in range(self.size):
-                self.individuums.append(Tree(max_depth=5, growth="part", variables=variables))
-                self.trial_individuums.append(Tree(max_depth=5, growth="part", variables=variables))
+                self.individuums.append(Tree(max_depth=5, growth="part", variables=objective_function.variables))
+                self.trial_individuums.append(Tree(max_depth=5, growth="part", variables=objective_function.variables))
         elif algorithm is "ga":
             for i in range(self.size):
                 self.individuums.append(binary_string(bounds=bounds))
