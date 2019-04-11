@@ -30,11 +30,7 @@ def reliability(func_name,x_aprox):
     mfmin /= x_aprox.shape[0]
     return reliab, mse, mfmin, fmin
 def pltfigures():
-    paths = ["C:/Users/goome/YandexDisk/учеба/Магдип/stats_np100100/",
-             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np6/",
-             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np300600/",
-             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np400800/",
-             "C:/Users/goome/YandexDisk/PycharmProjects/GP/GPstats_tests200200/"]
+    paths = ["C:/Users/goome/YandexDisk/учеба/Магдип/gp_stats_200200/"]
     ax = {}
     d=0
     fig = plt.figure()
@@ -42,7 +38,7 @@ def pltfigures():
         pfiles = os.listdir(path)
         for pfunc in pfiles:
             pdims = os.listdir(path+pfunc+"/")
-            if "myfunc"  in pfunc:
+            if "sin"  in pfunc:
 
                 #plt.suptitle(pfunc[0].capitalize()+pfunc[1::])
                 for pdim in pdims:
@@ -88,12 +84,12 @@ def pltfigures():
                                     # chartBox = ax[pdim].get_position()
                                     # ax[pdim].set_position([chartBox.x0, chartBox.y0, chartBox.width, chartBox.height])
                                     if "standard" in pparam:
-                                        plt.plot((1/(np.max(fitnesses, 2).T).mean(axis=1)-1),color='b',label=pparam)
+                                        plt.plot((1/(np.max(fitnesses, 2).T).mean(axis=1)-1),color='b',label=pparam,linestyle="--")
                                         # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='b')
 
                                     elif "dynamic" in pparam:
                                         # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='r')
-                                        plt.plot((1/(np.max(fitnesses, 2).T).mean(axis=1)-1), color='r',label=pparam)
+                                        plt.plot((1/(np.max(fitnesses, 2).T).mean(axis=1)-1), color='r',label=pparam,linestyle=":")
                         plt.grid()
                         #plt.semilogy()
                         plt.ylabel('reliability')

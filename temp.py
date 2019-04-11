@@ -96,21 +96,53 @@ import random as rn
 from SR_Tree import SR_Tree
 
 
-def res_func(x,optim):
-    pass
+
+
 import problem as pr
 
 from scipy.optimize import minimize
-tr = SR_Tree(max_depth=2, growth="full",variables=["x0"])
+from matplotlib import pyplot as plt
+from SR_Tree_Optimizer import SR_Tree_Optimizer
+optimizer = SR_Tree_Optimizer()
+
+tr = SR_Tree(max_depth=5, growth="part",variables=["x0"])
 print(pr.objective_function(tr.get_result))
 print(tr.get_formula())
-optim = tr.root.get_constant_nodes()
-#optim = [tr.root.offspring[0],tr.root.offspring[1]]
-# res = minimize(rosen, x0, method='BFGS', jac=rosen_der,
-#                options={'disp': True})
-optim[0][0].cargo=0.4
+
+func = tr.get_result
+x = []
+real = []
+aprox = []
+for var,y in pr.data:
+    x.append(var["x0"])
+    real.append(y)
+    aprox.append(func(var))
+
+fig = plt.figure()
+plt.scatter(x,real,s=1)
+plt.scatter(x, aprox,s=1)
+plt.show()
+
+
+optimizer.optimize(tr,pr.objective_function)
 print(pr.objective_function(tr.get_result))
 print(tr.get_formula())
+
+
+func = tr.get_result
+x = []
+real = []
+aprox = []
+for var,y in pr.data:
+    x.append(var["x0"])
+    real.append(y)
+    aprox.append(func(var))
+
+fig = plt.figure()
+plt.scatter(x,real,s=1)
+plt.scatter(x, aprox,s=1)
+plt.show()
+
 # # inp = Input(shape=(32,))
 # # a = RepeatVector(3)(inp)
 # # b = Dense(64)(a)

@@ -27,33 +27,34 @@ class problem():
 import problem as pr
 if __name__ == '__main__':
 
-    # gp = GeneticProgramming(objective_function=objective_function,variables=variables)
+    #gp = GeneticProgramming(objective_function=objective_function,variables=variables)
 
-    test =  tests.Test()
-    dims = [10]
+    # test =  tests.Test()
+    # dims = [10]
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
 
-    allfuncs = [problem(func) for func in tfunc.getfuncs(names="ackley")]
-
-    allbounds = []
-    for dim in dims:
-        allbounds += [[tuple(tfunc.getbounds(func.__name__,dim)) for d in range(dim)] for func in allfuncs]
-    allfuncs *=len(dims)
-
-    t1=time.time()
-    test.start_parallel(allfuncs,allbounds)
-    print(time.time()-t1)
-    # gp = genalgorithm.GeneticAlgorithm(algorithm="gp",
-    #                                    objective_function=pr.objective_function,
-    #                                    variables=pr.variables,
-    #                                    selfconfiguration=False,
-    #                                    size_of_population = 100,
-    #                                    iterations=100,
-    #                                    type_selection="tournament_9",
-    #                                    type_crossover="one_point",
-    #                                    type_mutation="growth",
-    # #                                    nprint=1)
+    # allfuncs = [problem(func) for func in tfunc.getfuncs(names="ackley")]
+    #
+    # allbounds = []
+    # for dim in dims:
+    #     allbounds += [[tuple(tfunc.getbounds(func.__name__,dim)) for d in range(dim)] for func in allfuncs]
+    # allfuncs *=len(dims)
+    #
+    # t1=time.time()
+    # test.start_parallel(allfuncs,allbounds)
+    # print(time.time()-t1)
+    gp = genalgorithm.GeneticAlgorithm(algorithm="gp",
+                                       objective_function=pr.objective_function,
+                                       variables=pr.variables,
+                                       selfconfiguration=True,
+                                       scheme="standard",
+                                       size_of_population = 200,
+                                       iterations=200,
+                                       type_selection="tournament_9",
+                                       type_crossover="one_point",
+                                       type_mutation="growth",
+                                        nprint=1)
     # ga = genalgorithm.GeneticAlgorithm(algorithm="ga",
     #                       objective_function=allfuncs[0],
     #                       bounds=allbounds[0],
@@ -65,10 +66,10 @@ if __name__ == '__main__':
     #                       type_crossover="two_point",
     #                       type_mutation="weak",
     #                       nprint=100)
-    # t1=time.time()
-    # ga.run()
-    # print(time.time()-t1)
-    # cProfile.run("ga.run()", sort="tottime")
+    t1=time.time()
+    gp.run()
+    print(time.time()-t1)
+    #cProfile.run("gp.run()", sort="tottime")
     # fitnesses = ga.fit_stats
     # stats = ga.oper_stats
     # fitnesses =[fitnesses]
@@ -78,19 +79,19 @@ if __name__ == '__main__':
 
 
     #
-    # func = gp.population.bestInd.get_result
-    # x = []
-    # real = []
-    # aprox = []
-    # for var,y in pr.data:
-    #     x.append(var["x0"])
-    #     real.append(y)
-    #     aprox.append(func(var))
-    #
-    # fig = plt.figure()
-    # plt.scatter(x,real,s=1)
-    # plt.scatter(x, aprox,s=1)
-    # plt.show()
+    func = gp.population.bestInd.get_result
+    x = []
+    real = []
+    aprox = []
+    for var,y in pr.data:
+        x.append(var["x0"])
+        real.append(y)
+        aprox.append(func(var))
+
+    fig = plt.figure()
+    plt.scatter(x,real,s=1)
+    plt.scatter(x, aprox,s=1)
+    plt.show()
     # #
     # if stats:
     #     operator = "selection"
