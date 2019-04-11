@@ -33,19 +33,22 @@ def pltfigures():
     paths = ["C:/Users/goome/YandexDisk/учеба/Магдип/stats_np100100/",
              "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np6/",
              "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np300600/",
-             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np400800/"]
+             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np400800/",
+             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np1000600/",
+             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_tests2000600/"]
     ax = {}
     d=0
-    fig = plt.figure()
+    fig = plt.figure(figsize=(10, 6))
+
     for path in paths:
         pfiles = os.listdir(path)
         for pfunc in pfiles:
             pdims = os.listdir(path+pfunc+"/")
-            if "rastrigin"  in pfunc:
+            if "zakharov"  in pfunc:
 
                 #plt.suptitle(pfunc[0].capitalize()+pfunc[1::])
                 for pdim in pdims:
-                    if "2d" == pdim and "100100" in path or "5d" == pdim and "np6" in path or "7d" == pdim and "300600" in path or "10d" == pdim and "400800" in path:
+                    if "2d" == pdim and "100100" in path or "5d" == pdim and "400800" in path or "7d" == pdim and "1000600" in path or "10d" == pdim and "2000600" in path:
                         pparams = os.listdir(path + pfunc+"/"+pdim+"/")
 
 
@@ -79,7 +82,7 @@ def pltfigures():
                                     color , linestyle = 'b', '--'
                                     if "dynamic" in pparam:
                                         color, linestyle = 'r', ':'
-                                    pparam = pparam.replace("ga#","").replace("dynamic","best replacement").replace("notselfconf#","").replace("#","/").replace(".npz","").replace("/selfconfiguration","")
+                                    pparam = pparam.replace("ga#","").replace("dynamic","Модифицированный").replace("standard","Стандартный").replace("notselfconf#","").replace("#","/").replace(".npz","").replace("/selfconfiguration","")
 
                                     #ax[pdim].plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).mean(0), label=pparam,color = color,linestyle=linestyle)
                                     ax[pdim].plot( np.array([i*50 for i in range(len(reliab))]),np.array(reliab) ,label=pparam, color=color, linestyle=linestyle)
@@ -95,15 +98,16 @@ def pltfigures():
                                     #     plt.plot(np.max(fitnesses, 2).T, color='r')
                         plt.grid()
                         #plt.semilogy()
-                        plt.ylabel('reliability')
-                        plt.xlabel('population')
+                        plt.ylabel('Надежность')
+                        plt.ylim(0, 1.05)
+                        plt.xlabel('Поколение')
 
     plt.legend(loc='center left', bbox_to_anchor=(1.05, 0.5), ncol=1)
     plt.subplots_adjust(wspace=0.07)
-                #plt.subplots_adjust(hspace=0.55,wspace=0.4)
+
     fig.tight_layout()
 
-                # fig.savefig('D:/YandexDisk/учеба/IWMMA/2018/300i600p_%s.png' %pfunc)
+    fig.savefig('C:/Users/goome/YandexDisk/учеба/Магдип/zakharov.png')
     plt.show()
 
 def pltreliability():
