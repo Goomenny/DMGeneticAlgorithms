@@ -47,7 +47,7 @@ class Tree:
         self_copy.fitness = self.fitness
 
         if crossover_type == "standard":
-            rnlayer = rn.randint(0, other.root.get_depth())
+            rnlayer = rn.randint(1, other.root.get_depth())
             rnselflayer = rn.randint(1, self_copy.root.get_depth())
 
             changednode = rn.choice(self_copy.root.getNodesFromLayer(rnselflayer))
