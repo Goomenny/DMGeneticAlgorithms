@@ -24,25 +24,25 @@ if __name__ == '__main__':
     params = [["dynamic", True, "rank", "standard", "weak"],
               ["standard", True, "rank", "standard", "weak"]
               ]
-    t1=time.time()
-    test.gp_start_parallel(allfuncs,params)
-    print(time.time()-t1)
-    # gp = genalgorithm.GeneticAlgorithm(algorithm="gp",
-    #                                    objective_function=allfuncs[0],
-    #                                    variables=allfuncs[0].variables,
-    #                                    selfconfiguration=True,
-    #                                    scheme="dynamic",
-    #                                    size_of_population = 200,
-    #                                    iterations=200,
-    #                                    type_selection="tournament_9",
-    #                                    type_crossover="one_point",
-    #                                    type_mutation="growth",
-    #                                     nprint=1)
-    #
     # t1=time.time()
-    # gp.run()
+    # test.gp_start_parallel(allfuncs,params)
     # print(time.time()-t1)
-    #cProfile.run("gp.run()", sort="tottime")
+    gp = genalgorithm.GeneticAlgorithm(algorithm="gp",
+                                       objective_function=allfuncs[0],
+                                       variables=allfuncs[0].variables,
+                                       selfconfiguration=True,
+                                       scheme="dynamic",
+                                       size_of_population = 100,
+                                       iterations=200,
+                                       type_selection="tournament_9",
+                                       type_crossover="one_point",
+                                       type_mutation="growth",
+                                        nprint=1)
+
+    t1=time.time()
+    gp.run()
+    print(time.time()-t1)
+    # cProfile.run("gp.run()", sort="tottime")
     # fitnesses = ga.fit_stats
     # stats = ga.oper_stats
     # fitnesses =[fitnesses]
@@ -52,20 +52,20 @@ if __name__ == '__main__':
 
 
     #
-    # func = gp.population.bestInd.get_result
-    # x = []
-    # real = []
-    # aprox = []
-    # for var,y in allfuncs[0].data:
-    #     x.append(var["x0"])
-    #     real.append(y)
-    #     aprox.append(func(var))
+    func = gp.population.bestInd.get_result
+    x = []
+    real = []
+    aprox = []
+    for var,y in allfuncs[0].data:
+        x.append(var["x0"])
+        real.append(y)
+        aprox.append(func(var))
+
+    fig = plt.figure()
+    plt.scatter(x,real,s=1)
+    plt.scatter(x, aprox,s=1)
+    plt.show()
     #
-    # fig = plt.figure()
-    # plt.scatter(x,real,s=1)
-    # plt.scatter(x, aprox,s=1)
-    # plt.show()
-    # #
     # if stats:
     #     operator = "selection"
     #     x = []
