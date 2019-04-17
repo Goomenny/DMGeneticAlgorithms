@@ -1,6 +1,8 @@
 import random as rn
 import operator
+import math
 from Node import Node
+pow2 = lambda x: (math.pow(x,2))
 OPERATORS = {'+': (operator.add, 2), '-': (operator.sub, 2),
              '*': (operator.mul, 2), '/': (operator.truediv, 2)}
 
@@ -82,7 +84,7 @@ class SR_Node(Node):
                 try:
                     return OPERATORS[self.cargo][0](self.offspring[0].evaluate(var))
                 except OverflowError:
-                    return 1
+                    return float('inf')
             else:
                 try:
                     return OPERATORS[self.cargo][0](self.offspring[0].evaluate(var), self.offspring[1].evaluate(var))
