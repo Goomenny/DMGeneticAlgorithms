@@ -2,6 +2,7 @@ from scipy.optimize import minimize, differential_evolution
 import numpy as np
 import copy
 class SR_Tree_Optimizer:
+    maxiter = 10
 
 
     def res_func(self, x, tree, coefficient_nodes,obj_func):
@@ -16,7 +17,7 @@ class SR_Tree_Optimizer:
         if coefficient_nodes:
             x0 = np.array([coef_node.cargo for coef_node in coefficient_nodes])
             try:
-                res = minimize(self.res_func, x0, args=(copy_tree, coefficient_nodes,obj_func), method='L-BFGS-B', options={'maxiter': 10, 'disp': False})
+                res = minimize(self.res_func, x0, args=(copy_tree, coefficient_nodes,obj_func), method='L-BFGS-B', options={'maxiter': self.maxiter, 'disp': False})
 
                 #res = differential_evolution(self.res_func, bounds,args=(tree, coefficient_nodes,obj_func),updating='immediate',maxiter=10)
             except:
