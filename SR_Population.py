@@ -1,4 +1,5 @@
 from population import Population
+import random as rn
 
 class SR_Population(Population):
     def __init__(self,
@@ -9,7 +10,8 @@ class SR_Population(Population):
                  bounds=None,
                  type_selection=None,
                  type_crossover=None,
-                 type_mutation=None):
+                 type_mutation=None,
+                 max_depth = None):
         super().__init__(algorithm = algorithm,
                                      sizeofpopulation=sizeofpopulation,
                                      objective_function=objective_function,
@@ -17,7 +19,8 @@ class SR_Population(Population):
                                      bounds=bounds,
                                      type_selection=type_selection,
                                      type_crossover=type_crossover,
-                                     type_mutation=type_mutation
+                                     type_mutation=type_mutation,
+                                     max_depth = max_depth
                                      )
 
     def calculate_fitnesses(self, trial = False):
@@ -29,5 +32,7 @@ class SR_Population(Population):
             if ind.changed:
                 if i == self.i_best:
                     ind.calculate_fitness(self.objective_function,coefficient_optimized=True)
+                elif rn.random()<0.5:
+                    ind.calculate_fitness(self.objective_function, coefficient_optimized=True)
                 else:
                     ind.calculate_fitness(self.objective_function)

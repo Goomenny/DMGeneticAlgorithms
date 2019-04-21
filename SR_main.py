@@ -1,7 +1,7 @@
 import cProfile
 
 from matplotlib import pyplot as plt
-
+import random as rn
 #rn.seed(66)
 import genalgorithm
 import tests
@@ -19,7 +19,7 @@ if __name__ == '__main__':
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
 
-    allfuncs = [problem(func,1) for func in tfunc.getfuncs(names="myfunc")]
+    allfuncs = [problem(func,1) for func in tfunc.getfuncs(names="I2")]
     allfuncs *=len(dims)
     params = [["dynamic", True, "rank", "standard", "weak"],
               ["standard", True, "rank", "standard", "weak"]
@@ -34,10 +34,11 @@ if __name__ == '__main__':
                                        scheme="dynamic",
                                        size_of_population = 100,
                                        iterations=200,
+                                       max_depth = 6,
                                        type_selection="tournament_9",
                                        type_crossover="one_point",
                                        type_mutation="growth",
-                                        nprint=1)
+                                        nprint=10)
 
     t1=time.time()
     gp.run()
@@ -59,7 +60,7 @@ if __name__ == '__main__':
     for var,y in allfuncs[0].data:
         x.append(var["x0"])
         real.append(y)
-        aprox.append(func(var))
+    aprox.append(func(allfuncs[0].np_var))
 
     fig = plt.figure()
     plt.scatter(x,real,s=1)
