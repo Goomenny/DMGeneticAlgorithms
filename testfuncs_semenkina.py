@@ -66,8 +66,8 @@ def I17(x):
 
     return sin(x)+x
 def myfunc(x):
-
-    return sin(x)
+    x1, x2 = x
+    return x1**2+2*x2**2
 
 allfuncs = [
     I1,
@@ -107,7 +107,7 @@ I12._bounds = [0, 4]
 
 I16._bounds = [-5, 5]
 I17._bounds = [-5, 5]
-myfunc._bounds = [-pi, pi]
+myfunc._bounds = [-5, 5]
 # ...............................................................................
 def getfuncs(names, dim=0):
     """ for f in getfuncs( "a b ..." ):
