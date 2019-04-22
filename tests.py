@@ -108,6 +108,7 @@ class Test:
                                   scheme=param[0],
                                   variables=obj_func.variables,
                                   size_of_population=self.size_of_population,
+                                  max_depth=5,
                                   iterations=self.iterations,
                                   type_selection=param[2],
                                   type_crossover=param[3],
