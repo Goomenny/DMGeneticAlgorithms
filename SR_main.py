@@ -19,7 +19,7 @@ if __name__ == '__main__':
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
 
-    allfuncs = [problem(func,1) for func in tfunc.getfuncs(names="I2")]
+    allfuncs = [problem(func,1) for func in tfunc.getfuncs(names="myfunc")]
     allfuncs *=len(dims)
     params = [["dynamic", True, "rank", "standard", "weak"],
               ["standard", True, "rank", "standard", "weak"]

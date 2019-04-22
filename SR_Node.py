@@ -8,9 +8,9 @@ OPERATORS = {'+': (operator.add, 2), '-': (operator.sub, 2),
              '*': (operator.mul, 2), '/': (operator.truediv, 2)}
 
 #OPERATORS['pow2'] =  (pow2, 1)
-OPERATORS['cos'] = (np.cos,1)
+#OPERATORS['cos'] = (np.cos,1)
 
-rncargo = lambda: (rn.random() * 40 - 20)
+rncargo = lambda: (rn.random() * 2 - 1)
 
 
 
