@@ -6,7 +6,7 @@ class problem():
     def __init__(self, obj_func,dim):
         self.obj_func = obj_func
         self.__name__ = obj_func.__name__
-        self.data_size = 8000
+        self.data_size = 800
         self.data = []
         self.dim = dim
         self.bounds =[tuple(testfuncs_semenkina.getbounds(self.__name__,d)) for d in range(dim)]
