@@ -19,7 +19,7 @@ if __name__ == '__main__':
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
 
-    allfuncs = [problem(func,1) for func in tfunc.getfuncs(names="myfunc")]
+    allfuncs = [problem(func,1) for func in tfunc.getfuncs(names="I1")]
     allfuncs *=len(dims)
     params = [["dynamic", True, "rank", "standard", "weak"],
               ["standard", True, "rank", "standard", "weak"]
@@ -32,9 +32,9 @@ if __name__ == '__main__':
     #                                    variables=allfuncs[0].variables,
     #                                    selfconfiguration=True,
     #                                    scheme="dynamic",
-    #                                    size_of_population = 100,
+    #                                    size_of_population = 200,
     #                                    iterations=200,
-    #                                    max_depth = 6,
+    #                                    max_depth = 10,
     #                                    type_selection="tournament_9",
     #                                    type_crossover="one_point",
     #                                    type_mutation="growth",
