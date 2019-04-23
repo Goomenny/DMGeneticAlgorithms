@@ -109,7 +109,7 @@ class Test:
                                   variables=obj_func.variables,
                                   size_of_population=self.size_of_population,
                                   iterations=self.iterations,
-                                  max_depth=5,
+                                  max_depth=6,
                                   type_selection=param[2],
                                   type_crossover=param[3],
                                   type_mutation=param[4],

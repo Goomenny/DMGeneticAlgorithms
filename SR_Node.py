@@ -7,12 +7,12 @@ pow2 = lambda x: (operator.pow(x,2))
 OPERATORS = {'+': (operator.add, 2), '-': (operator.sub, 2),
              '*': (operator.mul, 2), '/': (operator.truediv, 2)}
 
-#OPERATORS['pow2'] =  (pow2, 1)
+OPERATORS['pow2'] =  (pow2, 1)
 # OPERATORS['cos'] = (np.cos,1)
 # OPERATORS['exp'] = (np.exp,1)
 
-#rncargo = lambda: (rn.random() * 2 - 1)
-rncargo = lambda: rn.choice(range(5))
+rncargo = lambda: (rn.random() * 2 - 1)
+#rncargo = lambda: rn.choice(range(1,101,1))
 
 
 
