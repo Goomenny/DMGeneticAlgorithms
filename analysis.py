@@ -87,9 +87,9 @@ def pltfigures():
                                     # ax[pdim].set_position([chartBox.x0, chartBox.y0, chartBox.width, chartBox.height])
                                     if "standard" in pparam:
                                         #plt.plot((1/(np.max(fitnesses, 2).T).mean(axis=1)-1),color='b',label=pparam,linestyle="--")
-                                        plt.plot((np.max(fitnesses, 2).T).mean(axis=1), color='b',
-                                                 label=pparam, linestyle="--")
-                                        plt.plot((np.max(fitnesses, 2)>0.95).sum(axis=0)/fitnesses.shape[0], color="b",label=pparam,linestyle="--")
+                                        # plt.plot((np.max(fitnesses, 2).T).mean(axis=1), color='b',
+                                        #          label=pparam, linestyle="--")
+                                        plt.plot((np.max(fitnesses, 2)>0.9).sum(axis=0)/fitnesses.shape[0], color="b",label=pparam,linestyle="--")
                                         # plot((np.max(fitnesses, 2).T).std(axis=1), color='b',
                                         #          label=pparam, linestyle="--")
 
@@ -98,9 +98,9 @@ def pltfigures():
                                     elif "dynamic" in pparam:
                                         # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='r')
                                         # plt.plot((1/(np.max(fitnesses, 2).T).mean(axis=1)-1), color='r',label=pparam,linestyle=":")
-                                        plt.plot((np.max(fitnesses, 2).T).mean(axis=1) , color='r',
-                                                 label=pparam, linestyle=":")
-                                        plt.plot((np.max(fitnesses, 2)>0.95).sum(axis=0)/fitnesses.shape[0], color="r",label=pparam,linestyle=":")
+                                        # plt.plot((np.max(fitnesses, 2).T).mean(axis=1) , color='r',
+                                        #          label=pparam, linestyle=":")
+                                        plt.plot((np.max(fitnesses, 2)>0.9).sum(axis=0)/fitnesses.shape[0], color="r",label=pparam,linestyle=":")
                         plt.grid()
                         plt.ylim([0,1])
                         #plt.semilogy()
