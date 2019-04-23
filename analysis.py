@@ -32,7 +32,7 @@ def reliability(func_name,x_aprox):
 
 def pltfigures():
     paths = ["C:/Users/goome/YandexDisk/учеба/Магдип/gp_stats_100100/",
-             r"C:\Users\goome\YandexDisk\PycharmProjects\GP\GPstats_tests100200/"]
+             r"C:\Users\goome\YandexDisk\PycharmProjects\GP\GPstats_tests100500/"]
     ax = {}
     d=0
     fig = plt.figure()
@@ -44,7 +44,7 @@ def pltfigures():
 
                 #plt.suptitle(pfunc[0].capitalize()+pfunc[1::])
                 for pdim in pdims:
-                    if "1d" == pdim and "200100" in path or "2d" == pdim and "100200" in path or "7d" == pdim and "300600" in path or "10d" == pdim and "400800" in path:
+                    if "1d" == pdim and "200100" in path or "2d" == pdim and "100500" in path or "7d" == pdim and "300600" in path or "10d" == pdim and "400800" in path:
                         pparams = os.listdir(path + pfunc+"/"+pdim+"/")
 
 
@@ -87,8 +87,8 @@ def pltfigures():
                                     # ax[pdim].set_position([chartBox.x0, chartBox.y0, chartBox.width, chartBox.height])
                                     if "standard" in pparam:
                                         #plt.plot((1/(np.max(fitnesses, 2).T).mean(axis=1)-1),color='b',label=pparam,linestyle="--")
-                                        # plt.plot((np.max(fitnesses, 2).T).mean(axis=1), color='b',
-                                        #          label=pparam, linestyle="--")
+                                        plt.plot((np.max(fitnesses, 2).T).mean(axis=1), color='b',
+                                                 label=pparam, linestyle="--")
                                         plt.plot((np.max(fitnesses, 2)>0.9).sum(axis=0)/fitnesses.shape[0], color="b",label=pparam,linestyle="--")
                                         # plot((np.max(fitnesses, 2).T).std(axis=1), color='b',
                                         #          label=pparam, linestyle="--")
@@ -98,8 +98,8 @@ def pltfigures():
                                     elif "dynamic" in pparam:
                                         # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='r')
                                         # plt.plot((1/(np.max(fitnesses, 2).T).mean(axis=1)-1), color='r',label=pparam,linestyle=":")
-                                        # plt.plot((np.max(fitnesses, 2).T).mean(axis=1) , color='r',
-                                        #          label=pparam, linestyle=":")
+                                        plt.plot((np.max(fitnesses, 2).T).mean(axis=1) , color='r',
+                                                 label=pparam, linestyle=":")
                                         plt.plot((np.max(fitnesses, 2)>0.9).sum(axis=0)/fitnesses.shape[0], color="r",label=pparam,linestyle=":")
                         plt.grid()
                         plt.ylim([0,1])

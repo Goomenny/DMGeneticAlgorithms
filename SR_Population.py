@@ -32,7 +32,7 @@ class SR_Population(Population):
             if ind.changed:
                 if i == self.i_best:
                     ind.calculate_fitness(self.objective_function,coefficient_optimized=True)
-                elif rn.random()<0.5:
-                    ind.calculate_fitness(self.objective_function, coefficient_optimized=True)
+                elif rn.random()<1:
+                    ind.calculate_fitness(self.objective_function, coefficient_optimized=False)
                 else:
                     ind.calculate_fitness(self.objective_function)
