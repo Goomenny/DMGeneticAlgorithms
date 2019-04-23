@@ -30,74 +30,87 @@ def reliability(func_name,x_aprox):
     mfmin /= x_aprox.shape[0]
     return reliab, mse, mfmin, fmin
 def pltfigures():
-    path = "E:/stats_np400800/"
-    pfiles = os.listdir(path)
+    paths = ["C:/Users/goome/YandexDisk/учеба/Магдип/stats_np100100/",
+             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np6/",
+             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np300600/",
+             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np400800/",
+             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np600600/",
+             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np1000600/",
+             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_np1500300/"]
+    paths = ["C:/Users/goome/YandexDisk/учеба/Магдип/stats_tests100300/",
+             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_tests100500/",
+             "C:/Users/goome/YandexDisk/учеба/Магдип/stats_tests5001000/"]
+    ax = {}
+    d=0
+    fig = plt.figure()
+    for path in paths:
+        pfiles = os.listdir(path)
+        for pfunc in pfiles:
+            pdims = os.listdir(path+pfunc+"/")
+            if "ackley"  in pfunc:
 
-    for pfunc in pfiles:
-        pdims = os.listdir(path+pfunc+"/")
-        if "powersum" not in pfunc:
-            ax={}
-            fig = plt.figure()
-            #plt.suptitle(pfunc[0].capitalize()+pfunc[1::])
-            for d,pdim in enumerate(pdims):
-
-                pparams = os.listdir(path + pfunc+"/"+pdim+"/")
+                #plt.suptitle(pfunc[0].capitalize()+pfunc[1::])
+                for pdim in pdims:
+                    if "2d" == pdim and "100300" in path or "3d" == pdim and "100500" in path or "5d" == pdim and "100500" in path or "7d" == pdim and "300600" in path or "10d" == pdim and "1500300" in path:
+                        pparams = os.listdir(path + pfunc+"/"+pdim+"/")
 
 
-                ax[pdim]=plt.subplot(2, 2, d + 1)
-                plt.title(pdim, fontsize=11)
+                        ax[pdim]=plt.subplot(2, 2, d + 1)
+                        d+=1
+                        plt.title(pdim, fontsize=10)
 
-                # try:
-                #     os.makedirs("E:/stats_np2/" + pfunc + "/" + pdim + "/")
-                # except:
-                #     pass
-                for i,pparam in enumerate(pparams):
-                    if "selfconfiguration" in pparam:
-                        with np.load(path + pfunc+"/"+pdim+"/"+pparam, 'r') as data:
-                            #stats= pickle.load(data)
-                            fitnesses = data["fit"]
-                            x = data["sol"]
-                            # fitnesses = np.array(stats["fit"])
-                            # x_sol = np.array( [[ [x for x in sol.values()] for sol in iter] for iter in stats["x"]])
-                            # try:
-                            #     np.savez("E:/stats_np3/" + pfunc+"/"+pdim+"/"+"ga#standard#selfconfiguration",fit=fitnesses,sol=x)
-                            # except:
-                            #     print("Ошибка")
-                            # print("E:/stats_np3/" + pfunc+"/"+pdim+"/"+"ga#standard#selfconfiguration", "saved")
-                            reliab = []
-                            try:
-                                reliab, mse, mfmin, fmin = reliability(pfunc, x)
-                                print(pfunc+ " " + pdim,pparam,"reliab",reliab,"mse %f" %mse,"mfmin %f"%mfmin, "fmin %f" %fmin)
-                            except:
-                                print(pfunc+ " " + pdim,pparam,"ошибка")
-                            color , linestyle = 'b', '--'
-                            if "dynamic" in pparam:
-                                color, linestyle = 'r', ':'
-                            pparam = pparam.replace("ga#","").replace("dynamic","best replacement").replace("notselfconf#","").replace("#","/").replace(".npz","")
+                        # try:
+                        #     os.makedirs("E:/stats_np2/" + pfunc + "/" + pdim + "/")
+                        # except:
+                        #     pass
+                        for i,pparam in enumerate(pparams):
+                            if "notselfconf" in pparam:
+                                with np.load(path + pfunc+"/"+pdim+"/"+pparam, 'r') as data:
+                                    #stats= pickle.load(data)
+                                    fitnesses = data["fit"]
+                                    x = data["sol"]
+                                    # fitnesses = np.array(stats["fit"])
+                                    # x_sol = np.array( [[ [x for x in sol.values()] for sol in iter] for iter in stats["x"]])
+                                    # try:
+                                    #     np.savez("E:/stats_np3/" + pfunc+"/"+pdim+"/"+"ga#standard#selfconfiguration",fit=fitnesses,sol=x)
+                                    # except:
+                                    #     print("Ошибка")
+                                    # print("E:/stats_np3/" + pfunc+"/"+pdim+"/"+"ga#standard#selfconfiguration", "saved")
+                                    reliab = []
+                                    try:
+                                        reliab, mse, mfmin, fmin = reliability(pfunc, x)
+                                        print(pfunc+ " " + pdim,pparam,"reliab",reliab,"mse %f" %mse,"mfmin %f"%mfmin, "fmin %f" %fmin)
+                                    except:
+                                        print(pfunc+ " " + pdim,pparam,"ошибка")
+                                    color , linestyle = 'b', '--'
+                                    if "dynamic" in pparam:
+                                        color, linestyle = 'r', ':'
+                                    pparam = pparam.replace("ga#","").replace("dynamic","best replacement").replace("notselfconf#","").replace("#","/").replace(".npz","").replace("/selfconfiguration","")
 
-                            #ax[pdim].plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).mean(0), label=pparam,color = color,linestyle=linestyle)
-                            ax[pdim].plot( np.array([i*50 for i in range(len(reliab))]),np.array(reliab) ,label=pparam, color=color, linestyle=linestyle)
-                            #ax[pdim].plot(,np.array(reliab), label=pparam, color=color, linestyle=linestyle)
-                            chartBox = ax[pdim].get_position()
-                            ax[pdim].set_position([chartBox.x0, chartBox.y0, chartBox.width, chartBox.height])
-                            # if "standard" in pparam:
-                            #     plt.plot(np.max(fitnesses, 2).T,color='b')
-                            #     # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='b')
-                            #
-                            # elif "dynamic" in pparam:
-                            #     # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='r')
-                            #     plt.plot(np.max(fitnesses, 2).T, color='r')
-                plt.grid()
-                #plt.semilogy()
-                plt.ylabel('reliability')
-                plt.xlabel('population')
+                                    #ax[pdim].plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).mean(0), label=pparam,color = color,linestyle=linestyle)
+                                    ax[pdim].plot( np.array([i*50 for i in range(len(reliab))]),np.array(reliab) ,label=pparam, color=color, linestyle=linestyle)
+                                    #ax[pdim].plot(,np.array(reliab), label=pparam, color=color, linestyle=linestyle)
+                                    chartBox = ax[pdim].get_position()
+                                    ax[pdim].set_position([chartBox.x0, chartBox.y0, chartBox.width, chartBox.height])
+                                    # if "standard" in pparam:
+                                    #     plt.plot(np.max(fitnesses, 2).T,color='b')
+                                    #     # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='b')
+                                    #
+                                    # elif "dynamic" in pparam:
+                                    #     # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='r')
+                                    #     plt.plot(np.max(fitnesses, 2).T, color='r')
+                        plt.grid()
+                        #plt.semilogy()
+                        plt.ylabel('reliability')
+                        plt.xlabel('population')
 
-            plt.legend(loc='center left', bbox_to_anchor=(1.05, 0.5), ncol=1)
-            #plt.subplots_adjust(hspace=0.55,wspace=0.4)
-            fig.tight_layout()
+    plt.legend(loc='center left', bbox_to_anchor=(1.05, 0.5), ncol=1)
+    plt.subplots_adjust(wspace=0.07)
+                #plt.subplots_adjust(hspace=0.55,wspace=0.4)
+    fig.tight_layout()
 
-            # fig.savefig('D:/YandexDisk/учеба/IWMMA/2018/300i600p_%s.png' %pfunc)
-            plt.show()
+                # fig.savefig('D:/YandexDisk/учеба/IWMMA/2018/300i600p_%s.png' %pfunc)
+    plt.show()
 
 def pltreliability():
     path = "E:/stats_notself/"
