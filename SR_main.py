@@ -1,5 +1,5 @@
 import cProfile
-
+import numpy as np
 from matplotlib import pyplot as plt
 import random as rn
 #rn.seed(66)
@@ -18,33 +18,35 @@ if __name__ == '__main__':
     dims = [2]
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
-
-    allfuncs = [problem(func,2) for func in tfunc.getfuncs(names="I5")]
-    allfuncs *=len(dims)
-    params = [["dynamic", True, "rank", "standard", "weak"],
-              ["standard", True, "rank", "standard", "weak"]
+    allfuncs = [problem(func, 2) for func in tfunc.getfuncs(names="I5")]
+    allfuncs *= len(dims)
+    params = [#["standard", True, "rank", "standard", "weak"],
+              ["dynamic", True, "rank", "standard", "weak"]
               ]
-    if True:
+
+    if  True:
         t1=time.time()
         test.gp_start_parallel(allfuncs,params)
         print(time.time()-t1)
     else:
-        gp = genalgorithm.GeneticAlgorithm(algorithm="gp",
-                                           objective_function=allfuncs[0],
-                                           variables=allfuncs[0].variables,
-                                           selfconfiguration=True,
-                                           scheme="dynamic",
-                                           size_of_population = 100,
-                                           iterations=200,
-                                           max_depth = 6,
-                                           type_selection="tournament_9",
-                                           type_crossover="one_point",
-                                           type_mutation="growth",
-                                            nprint=10)
+        for i in range(10):
+            gp = genalgorithm.GeneticAlgorithm(algorithm="gp",
+                                               objective_function=allfuncs[0],
+                                               variables=allfuncs[0].variables,
+                                               selfconfiguration=True,
+                                               scheme="dynamic",
+                                               size_of_population = 100,
+                                               iterations=100,
+                                               max_depth = 5,
+                                               type_selection="tournament_9",
+                                               type_crossover="one_point",
+                                               type_mutation="growth",
+                                                nprint=10)
 
-        t1=time.time()
-        gp.run()
-        print(time.time()-t1)
+            t1=time.time()
+            gp.run()
+            print(time.time()-t1)
+
     # cProfile.run("gp.run()", sort="tottime")
     # fitnesses = ga.fit_stats
     # stats = ga.oper_stats
