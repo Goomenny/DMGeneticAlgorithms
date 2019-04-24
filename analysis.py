@@ -32,7 +32,7 @@ def reliability(func_name,x_aprox):
 
 def pltfigures():
     paths = [r"C:\Users\goome\YandexDisk\учеба\Магдип\stats_tests2000600/",
-             r"C:\Users\goome\YandexDisk\PycharmProjects\GP\GPstats_tests100100/"]
+             r"C:\Users\goome\YandexDisk\PycharmProjects\GP\GPstats_tests100200/"]
     ax = {}
     d=0
     fig = plt.figure()
@@ -40,11 +40,11 @@ def pltfigures():
         pfiles = os.listdir(path)
         for pfunc in pfiles:
             pdims = os.listdir(path+pfunc+"/")
-            if "I5"  in pfunc:
+            if "myfunc"  in pfunc:
 
                 #plt.suptitle(pfunc[0].capitalize()+pfunc[1::])
                 for pdim in pdims:
-                    if "1d" == pdim and "200100" in path or "2d" == pdim and "100100" in path or "7d" == pdim and "300600" in path or "10d" == pdim and "2000600" in path:
+                    if "1d" == pdim and "200100" in path or "2d" == pdim and "100200" in path or "7d" == pdim and "300600" in path or "10d" == pdim and "2000600" in path:
                         pparams = os.listdir(path + pfunc+"/"+pdim+"/")
 
 
@@ -89,8 +89,8 @@ def pltfigures():
                                         #plt.plot((1/(np.max(fitnesses, 2).T).mean(axis=1)-1),color='b',label=pparam,linestyle="--")
                                         # plt.plot((np.max(fitnesses, 2).T).mean(axis=1), color='b',
                                         #          label=pparam, linestyle="--")
-                                        plt.plot(np.max(fitnesses, 2).max(axis=1),color="b")
-                                        #plt.plot((np.max(fitnesses, 2)>0.98).sum(axis=0)/fitnesses.shape[0], color="b",label=pparam,linestyle="--")
+                                        #plt.plot(np.max(fitnesses, 2).max(axis=1),color="b")
+                                        plt.plot((np.max(fitnesses, 2)>0.99).sum(axis=0)/fitnesses.shape[0], color="b",label=pparam,linestyle="--")
                                         # plot((np.max(fitnesses, 2).T).std(axis=1), color='b',
                                         #          label=pparam, linestyle="--")
 
@@ -101,10 +101,10 @@ def pltfigures():
                                         # plt.plot((1/(np.max(fitnesses, 2).T).mean(axis=1)-1), color='r',label=pparam,linestyle=":")
                                         # plt.plot((np.max(fitnesses, 2).T).mean(axis=1) , color='r',
                                         #          label=pparam, linestyle=":")
-                                        plt.plot(np.max(fitnesses, 2).max(axis=1),color="r")
-                                        #plt.plot((np.max(fitnesses, 2)>0.98).sum(axis=0)/fitnesses.shape[0], color="r",label=pparam,linestyle=":")
+                                        #plt.plot(np.max(fitnesses, 2).max(axis=1),color="r")
+                                        plt.plot((np.max(fitnesses, 2)>0.99).sum(axis=0)/fitnesses.shape[0], color="r",label=pparam,linestyle=":")
                         plt.grid()
-                        #plt.ylim([0,1])
+                        plt.ylim([0,1])
                         #plt.semilogy()
                         plt.ylabel('reliability')
                         plt.xlabel('population')

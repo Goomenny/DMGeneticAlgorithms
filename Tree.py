@@ -19,7 +19,7 @@ class Tree:
         return self._fitness
     @fitness.setter
     def fitness(self, value):
-        if value != value:
+        if value != value or value == 0:
             self._fitness = 0.0000000000001
         else:
             self._fitness = value
@@ -75,14 +75,14 @@ class Tree:
     def mutate(self, mutation_type = "growth",probability =None, Node_class = None):
 
         if not probability:
-            if mutation_type is "weak":
+            if mutation_type == "weak":
                 probability = 1/(5*self.get_depth())
-            elif mutation_type is "standard":
+            elif mutation_type == "standard":
                 probability = 1 / self.get_depth()
-            elif mutation_type is "strong":
+            elif mutation_type == "strong":
                 probability = 5 / self.get_depth()
 
-        if mutation_type is "growth":
+        if mutation_type == "growth":
             rnselflayer = rn.randint(1, self.root.get_depth())
             node = rn.choice(self.root.getNodesFromLayer(rnselflayer))
 

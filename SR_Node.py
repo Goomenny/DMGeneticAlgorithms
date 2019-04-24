@@ -2,6 +2,7 @@ import random as rn
 import operator
 import math
 import numpy as np
+np.seterr("ignore")
 from Node import Node
 pow2 = lambda x: (operator.pow(x,2))
 OPERATORS = {'+': (operator.add, 2), '-': (operator.sub, 2),

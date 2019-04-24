@@ -100,29 +100,30 @@ class Test:
     def do_test_(self,obj_func,param,path):
 
         fit = []
-
+        gp = []
         for run in range(self.runs):
-            gp = GeneticAlgorithm(algorithm="gp",
+            gp.append(GeneticAlgorithm(algorithm="gp",
                                   objective_function=obj_func,
                                   selfconfiguration=param[1],
                                   scheme=param[0],
                                   variables=obj_func.variables,
                                   size_of_population=self.size_of_population,
+                                  max_depth=5,
                                   iterations=self.iterations,
-                                  max_depth=6,
                                   type_selection=param[2],
                                   type_crossover=param[3],
                                   type_mutation=param[4],
-                                  nprint=-1)
-            gp.run()
-            fit.append(gp.fit_stats)
+                                  nprint=-1))
+        for i in range(self.runs):
+            gp[i].run()
+            fit.append(gp[i].fit_stats)
 
-            print(param[0], run)
+            print(param[0], i)
 
         fit = np.array(fit)
 
-        np.savez(path + "/" + gp.name, fit=fit)
-        print("Успешно записан %s" % gp.name)
+        np.savez(path + "/" + gp[0].name, fit=fit)
+        print("Успешно записан %s" % gp[0].name)
 
 
 
