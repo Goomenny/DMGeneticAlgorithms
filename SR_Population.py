@@ -31,8 +31,8 @@ class SR_Population(Population):
         for i, ind in enumerate(individuums):
             if ind.changed:
                 if i == self.i_best:
-                    ind.calculate_fitness(self.objective_function,coefficient_optimized=False)
-                elif rn.random()<0:
+                    ind.calculate_fitness(self.objective_function,coefficient_optimized=True)
+                elif rn.random()<0.5:
                     ind.calculate_fitness(self.objective_function, coefficient_optimized=True)
                 else:
                     ind.calculate_fitness(self.objective_function)

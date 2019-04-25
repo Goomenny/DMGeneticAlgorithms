@@ -18,25 +18,25 @@ if __name__ == '__main__':
     dims = [2]
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
-    allfuncs = [problem(func, 2) for func in tfunc.getfuncs(names="myfunc")]
+    allfuncs = [problem(func, 2) for func in tfunc.getfuncs(names="I5")]
     allfuncs *= len(dims)
     params = [["standard", True, "rank", "standard", "weak"],
               ["dynamic", True, "rank", "standard", "weak"]
               ]
 
-    if  True:
+    if  not True:
         t1=time.time()
         test.gp_start_parallel(allfuncs,params)
         print(time.time()-t1)
     else:
-        for i in range(10):
+        for i in range(1):
             gp = genalgorithm.GeneticAlgorithm(algorithm="gp",
                                                objective_function=allfuncs[0],
                                                variables=allfuncs[0].variables,
                                                selfconfiguration=True,
                                                scheme="dynamic",
                                                size_of_population = 100,
-                                               iterations=100,
+                                               iterations=200,
                                                max_depth = 5,
                                                type_selection="tournament_9",
                                                type_crossover="one_point",
@@ -57,19 +57,19 @@ if __name__ == '__main__':
 
 
     #
-    # func = gp.population.bestInd.get_result
-    # x = []
-    # real = []
-    # aprox = []
-    # for var,y in allfuncs[0].data:
-    #     x.append(var["x0"])
-    #     real.append(y)
-    # aprox.append(func(allfuncs[0].np_var))
-    #
-    # fig = plt.figure()
-    # plt.scatter(x,real,s=1)
-    # plt.scatter(x, aprox,s=1)
-    # plt.show()
+    func = gp.population.bestInd.get_result
+    x = []
+    real = []
+    aprox = []
+    for var,y in zip(allfuncs[0].np_var,allfuncs[0].np_y):
+        x.append(var[0])
+        real.append(y)
+    aprox.append(func(allfuncs[0].np_var))
+
+    fig = plt.figure()
+    plt.scatter(x,real,s=1)
+    plt.scatter(x, aprox,s=1)
+    plt.show()
 
     # if stats:
     #     operator = "selection"
