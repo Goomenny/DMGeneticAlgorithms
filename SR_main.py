@@ -24,7 +24,7 @@ if __name__ == '__main__':
               ["dynamic", True, "rank", "standard", "weak"]
               ]
 
-    if  not True:
+    if  True:
         t1=time.time()
         test.gp_start_parallel(allfuncs,params)
         print(time.time()-t1)
