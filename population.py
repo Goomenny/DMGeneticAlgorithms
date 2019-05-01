@@ -2,7 +2,7 @@ from Keras_Tree import Keras_Tree as Tree
 from binary_string import binary_string
 import random as rn
 import copy
-
+from multiprocessing import Pool,freeze_support
 
 import os
 
@@ -141,11 +141,26 @@ class Population:
             if self.i_best != i:
                 ind.mutate(mutation_type=self.operators["mutation"][i])
 
+    def multi_calculating_fitness(self, i):
+
+        return self.objective_function(self.individuums[i].get_result)
+
+
     def calculate_fitnesses(self):
 
-        for ind in self.individuums:
-            if ind.changed:
-                ind.calculate_fitness(self.objective_function)
+        # for ind in self.individuums:
+        #     if ind.changed:
+        freeze_support()
+        with Pool(processes=8) as pool:
+            multiple_results = [pool.apply_async(self.multi_calculating_fitness,(i,)) for i in range(self.size)]
+            val_loss = []
+            for res in multiple_results:
+                val_loss.append(res.get())
+            for i,ind in enumerate(self.individuums):
+                ind.fitness = 1 / (1 + val_loss[i])
+        # for ind in self.individuums:
+        #     print(ind.fitness)
+
                 # ind.fitness = 1 / (1 + self.objective_function(ind.get_result))
 
     def findBest(self):

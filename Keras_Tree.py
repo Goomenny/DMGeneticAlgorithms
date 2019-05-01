@@ -45,7 +45,7 @@ class Keras_Tree(Tree):
         model = Model(inputs=layers[0], outputs=layers[-1])
 
         model.compile(optimizer='Adagrad', loss='categorical_crossentropy', metrics=['acc'])
-        model.summary()
+        #model.summary()
         return model
 
 
