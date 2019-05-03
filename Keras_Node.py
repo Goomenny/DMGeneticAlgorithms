@@ -8,7 +8,7 @@ map_layers = ("Dense",
               "SimpleRNN",
               "GRU")
 
-rnsize_neurons = lambda: (rn.randint(1, 40))
+rnsize_neurons = lambda: (rn.randint(1, 50))
 rnsize_drop = lambda: (rn.choice([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]))
 map_activations = ("softmax", "elu", "selu", "softplus", "softsign", "relu", "tanh", "sigmoid", "hard_sigmoid",
                    "linear")
@@ -117,17 +117,17 @@ class Keras_Node(Node):
 
     def mutate(self, probability):
 
-
+        changed = False
         if rn.random() < probability:
             if self.type:
                 self.cargo = rn.choice(list(map_operators))
+                for ind in self.offspring:
+                    if ind.mutate(probability):
+                        changed = True
             else:
                 self.cargo = rn.choice(list(map_layers))
                 self.size_neurons = rnsize_neurons()
                 self.activation = rn.choice(map_activations)
-            return True
-        changed = False
-        for ind in self.offspring:
-            if ind.mutate(probability):
-                changed = True
+                return True
+
         return changed
