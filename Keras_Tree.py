@@ -20,7 +20,9 @@ class Keras_Tree(Tree):
         self.root = Keras_Node(deep=0, node_type=True, max_depth=self.max_depth, variables=self.variables, growth=growth)
         while (self.root.number_rnns()<1):
             super().mutate("strong",Node_class=Keras_Node)
-
+    def copy(self,other):
+        self.root= copy.deepcopy(other.root)
+        self.fitness = other.fitness
 
     def compile(self,var):
         architecture = self.root.get_architecture()
@@ -55,4 +57,4 @@ class Keras_Tree(Tree):
     def mutate(self, mutation_type = "growth",probability =None):
         super().mutate(mutation_type,probability,Keras_Node)
         while (self.root.number_rnns()<1):
-            super().mutate("strong",node=Keras_Node)
+            super().mutate("strong",Node_class=Keras_Node)
