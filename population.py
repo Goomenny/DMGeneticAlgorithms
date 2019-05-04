@@ -2,7 +2,7 @@ from Keras_Tree import Keras_Tree as Tree
 from binary_string import binary_string
 import random as rn
 import copy
-from multiprocessing import Pool,freeze_support
+
 
 import os
 
@@ -32,11 +32,7 @@ class Population:
                               mutation=[type_mutation for i in range(self.size)],
                               crossover=[type_crossover for i in range(self.size)])
 
-        if algorithm is "gp":
-            for i in range(self.size):
-                self.individuums.append(Tree(max_depth=2, growth="part", variables=variables))
-                self.trial_individuums.append(Tree(max_depth=2, growth="part", variables=variables))
-        elif algorithm is "ga":
+        if algorithm is "ga":
             for i in range(self.size):
                 self.individuums.append(binary_string(bounds=bounds))
                 self.trial_individuums.append(binary_string(bounds=bounds))
@@ -141,27 +137,11 @@ class Population:
             if self.i_best != i:
                 ind.mutate(mutation_type=self.operators["mutation"][i])
 
-    def multi_calculating_fitness(self, i):
-
-        return self.objective_function(self.individuums[i].get_result)
-
-
     def calculate_fitnesses(self):
 
-        # for ind in self.individuums:
-        #     if ind.changed:
-        freeze_support()
-        with Pool(processes=8) as pool:
-            multiple_results = [pool.apply_async(self.multi_calculating_fitness,(i,)) for i in range(self.size)]
-            val_loss = []
-            for res in multiple_results:
-                val_loss.append(res.get())
-            for i,ind in enumerate(self.individuums):
-                ind.fitness = 1 / (1 + val_loss[i])
-        # for ind in self.individuums:
-        #     print(ind.fitness)
-
-                # ind.fitness = 1 / (1 + self.objective_function(ind.get_result))
+        for ind in self.individuums:
+            if ind.changed:
+                ind.calculate_fitness(self.objective_function)
 
     def findBest(self):
 
@@ -186,9 +166,6 @@ class Population:
         self.individuums,self.trial_individuums = self.trial_individuums, self.individuums
     def dynamic_evolve(self):
 
-        #self.trial_individuums = [None for i in range(self.size)]
-
-
         for i in range(self.size):
             while True:
                 parent = self._getParent(self.operators["selection"][i])
@@ -197,6 +174,10 @@ class Population:
             self.trial_individuums[i] = self.individuums[i].crossover(parent, self.operators["crossover"][i],self.trial_individuums[i])
 
             self.trial_individuums[i].mutate(mutation_type=self.operators["mutation"][i])
+
+    def best_replacement(self):
+
+        for i in range(self.size):
             if self.trial_individuums[i].changed:
                 self.trial_individuums[i].calculate_fitness(self.objective_function)
 
