@@ -46,7 +46,7 @@ class Keras_Tree(Tree):
         layers.append(Dense(46, activation='softmax')(layers[-1]))
         model = Model(inputs=layers[0], outputs=layers[-1])
 
-        model.compile(optimizer='Adagrad', loss='categorical_crossentropy', metrics=['acc'])
+        model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc'])
         #model.summary()
         return model
 
