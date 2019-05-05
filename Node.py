@@ -88,5 +88,15 @@ class Node:
                 return nodes
             else:
                 return []
+    def get_number_offsprings(self):
+        size = 0
 
+        if self.type:
+
+            mass = [node.get_number_offsprings() for node in self.offspring]
+
+            return sum(mass)+1
+
+        else:
+            return 1
 

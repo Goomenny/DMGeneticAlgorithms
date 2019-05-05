@@ -13,8 +13,12 @@ class Tree:
         self.fitness = None
         self.changed = True
 
+
     def __str__(self):
         return str(self.root)
+
+    def get_size(self):
+        return self.root.get_number_offsprings()
 
     def get_result(self, var):
         return self.root.evaluate(var)
@@ -63,14 +67,14 @@ class Tree:
     def mutate(self, mutation_type = "growth",probability =None, Node_class = None):
 
         if not probability:
-            if mutation_type is "weak":
-                probability = 1/(5*self.get_depth())
-            elif mutation_type is "standard":
-                probability = 1 / self.get_depth()
-            elif mutation_type is "strong":
-                probability = 5 / self.get_depth()
+            if mutation_type == "weak":
+                probability = 1/(5*self.get_size())
+            elif mutation_type == "standard":
+                probability = 1 / self.get_size()
+            elif mutation_type == "strong":
+                probability = 5 / self.get_size()
 
-        if mutation_type is "growth":
+        if mutation_type == "growth":
             rnselflayer = rn.randint(1, self.root.get_depth())
             node = rn.choice(self.root.getNodesFromLayer(rnselflayer))
 

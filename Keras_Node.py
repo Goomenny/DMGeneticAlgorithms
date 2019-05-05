@@ -116,18 +116,24 @@ class Keras_Node(Node):
                 return 0
 
     def mutate(self, probability):
-
         changed = False
-        if rn.random() < probability:
-            if self.type:
+
+        if self.type:
+            if rn.random() < probability:
                 self.cargo = rn.choice(list(map_operators))
-                for ind in self.offspring:
-                    if ind.mutate(probability):
-                        changed = True
-            else:
+                changed = True
+            for ind in self.offspring:
+                if ind.mutate(probability):
+                    changed = True
+        else:
+            if rn.random() < probability:
                 self.cargo = rn.choice(list(map_layers))
+                changed = True
+            if rn.random() < probability:
                 self.size_neurons = rnsize_neurons()
+                changed = True
+            if rn.random() < probability:
                 self.activation = rn.choice(map_activations)
-                return True
+                changed = True
 
         return changed

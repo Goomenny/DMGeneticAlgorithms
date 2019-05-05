@@ -55,6 +55,15 @@ class Keras_Tree(Tree):
         return self.compile(var)
 
     def mutate(self, mutation_type = "growth",probability =None):
+
+        if not probability:
+            if mutation_type == "weak":
+                probability = 1/(3*5*self.get_size())
+            elif mutation_type == "standard":
+                probability = 1 / (3*self.get_size())
+            elif mutation_type == "strong":
+                probability = 5 / (3*self.get_size())
+
         super().mutate(mutation_type,probability,Keras_Node)
         while (self.root.number_rnns()<1):
             super().mutate("strong",Node_class=Keras_Node)
