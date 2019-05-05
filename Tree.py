@@ -13,6 +13,18 @@ class Tree:
         self.fitness = None
         self.changed = True
 
+    @property
+    def fitness(self):
+
+        return self._fitness
+    @fitness.setter
+    def fitness(self, value):
+        if value != value:
+            self._fitness = 0.0000000000001
+        else:
+            self._fitness = value
+
+
 
     def __str__(self):
         return str(self.root)

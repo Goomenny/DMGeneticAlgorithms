@@ -1,10 +1,16 @@
 import random as rn
 import operator
+import math
+import numpy as np
 from Node import Node
+pow2 = lambda x: (operator.pow(x,2))
 OPERATORS = {'+': (operator.add, 2), '-': (operator.sub, 2),
              '*': (operator.mul, 2), '/': (operator.truediv, 2)}
 
-rncargo = lambda: (rn.random() * 2 - 1)
+#OPERATORS['pow2'] =  (pow2, 1)
+OPERATORS['cos'] = (np.cos,1)
+
+rncargo = lambda: (rn.random() * 40 - 20)
 
 
 
@@ -76,23 +82,38 @@ class SR_Node(Node):
         else:
             return str(self.cargo)
 
+    def old_evaluate(self, var):
+        if self.type:
+            if self.arity == 1:
+                try:
+                    return OPERATORS[self.cargo][0](self.offspring[0].evaluate(var))
+                except OverflowError:
+                    return float('inf')
+            else:
+                try:
+                    return OPERATORS[self.cargo][0](self.offspring[0].evaluate(var), self.offspring[1].evaluate(var))
+                except:
+                    return float('inf')
+        elif self.variable:
+            return var[self.cargo]
+        else:
+            return self.cargo
     def evaluate(self, var):
         if self.type:
             if self.arity == 1:
                 try:
                     return OPERATORS[self.cargo][0](self.offspring[0].evaluate(var))
                 except OverflowError:
-                    return 1
+                    return float('inf')
             else:
                 try:
                     return OPERATORS[self.cargo][0](self.offspring[0].evaluate(var), self.offspring[1].evaluate(var))
-                except ZeroDivisionError:
-                    return 100000000
+                except:
+                    return float('inf')
         elif self.variable:
-            return var[self.cargo]
+            return var[:,int(self.cargo.replace("x",""))]
         else:
             return self.cargo
-
     def mutate(self, probability):
 
         if rn.random() < probability:

@@ -1,75 +1,49 @@
-
-
 import cProfile
-from builtins import print
 
 from matplotlib import pyplot as plt
-
-import numpy as np
 import random as rn
 #rn.seed(66)
-import genalgorithm, problem
-import ndtestfuncs
+import genalgorithm
 import tests
-import ndtestfuncs as tfunc
 import time
-class problem():
-    def __init__(self, obj_func):
-        self.obj_func = obj_func
-        self.__name__ = obj_func.__name__
-    def __str__(self):
-        return self.__name__
-    def __call__(self, x):
-        return self.obj_func(x())
-
-
-
 import problem as pr
+from problem import problem
+import testfuncs_semenkina as tfunc
+
 if __name__ == '__main__':
 
     #gp = GeneticProgramming(objective_function=objective_function,variables=variables)
 
-    # test =  tests.Test()
-    # dims = [10]
+    test =  tests.Test()
+    dims = [1]
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
 
-    # allfuncs = [problem(func) for func in tfunc.getfuncs(names="ackley")]
-    #
-    # allbounds = []
-    # for dim in dims:
-    #     allbounds += [[tuple(tfunc.getbounds(func.__name__,dim)) for d in range(dim)] for func in allfuncs]
-    # allfuncs *=len(dims)
-    #
+    allfuncs = [problem(func,1) for func in tfunc.getfuncs(names="I2")]
+    allfuncs *=len(dims)
+    params = [["dynamic", True, "rank", "standard", "weak"],
+              ["standard", True, "rank", "standard", "weak"]
+              ]
     # t1=time.time()
-    # test.start_parallel(allfuncs,allbounds)
+    # test.gp_start_parallel(allfuncs,params)
     # print(time.time()-t1)
     gp = genalgorithm.GeneticAlgorithm(algorithm="gp",
-                                       objective_function=pr.objective_function,
-                                       variables=pr.variables,
+                                       objective_function=allfuncs[0],
+                                       variables=allfuncs[0].variables,
                                        selfconfiguration=True,
-                                       scheme="standard",
-                                       size_of_population = 200,
+                                       scheme="dynamic",
+                                       size_of_population = 100,
                                        iterations=200,
+                                       max_depth = 6,
                                        type_selection="tournament_9",
                                        type_crossover="one_point",
                                        type_mutation="growth",
-                                        nprint=1)
-    # ga = genalgorithm.GeneticAlgorithm(algorithm="ga",
-    #                       objective_function=allfuncs[0],
-    #                       bounds=allbounds[0],
-    #                       selfconfiguration=True,
-    #                       scheme="dynamic",
-    #                       size_of_population=100,
-    #                       iterations=300,
-    #                       type_selection="tournament_9",
-    #                       type_crossover="two_point",
-    #                       type_mutation="weak",
-    #                       nprint=100)
+                                        nprint=10)
+
     t1=time.time()
     gp.run()
     print(time.time()-t1)
-    #cProfile.run("gp.run()", sort="tottime")
+    # cProfile.run("gp.run()", sort="tottime")
     # fitnesses = ga.fit_stats
     # stats = ga.oper_stats
     # fitnesses =[fitnesses]
@@ -83,16 +57,16 @@ if __name__ == '__main__':
     x = []
     real = []
     aprox = []
-    for var,y in pr.data:
+    for var,y in allfuncs[0].data:
         x.append(var["x0"])
         real.append(y)
-        aprox.append(func(var))
+    aprox.append(func(allfuncs[0].np_var))
 
     fig = plt.figure()
     plt.scatter(x,real,s=1)
     plt.scatter(x, aprox,s=1)
     plt.show()
-    # #
+    #
     # if stats:
     #     operator = "selection"
     #     x = []
@@ -115,4 +89,3 @@ if __name__ == '__main__':
     #             ax[operator].legend(loc='upper center', bbox_to_anchor=(0.1, 0.9), shadow=True, ncol=1)
     #     plt.show()
     # #
-

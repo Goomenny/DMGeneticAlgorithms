@@ -8,6 +8,7 @@ class GeneticAlgorithm:
                  size_of_population=100,
                  objective_function = None,
                  iterations = 100,
+                 max_depth=None,
                  variables = None,
                  bounds = None,
                  selfconfiguration = False,
@@ -27,7 +28,8 @@ class GeneticAlgorithm:
                                      bounds=bounds,
                                      type_selection=type_selection,
                                      type_crossover=type_crossover,
-                                     type_mutation=type_mutation
+                                     type_mutation=type_mutation,
+                                     max_depth = max_depth
                                      )
 
         self.name = algorithm+"#"+scheme+"#"

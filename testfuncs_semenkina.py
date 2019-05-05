@@ -1,4 +1,4 @@
-from math import sin, cos, exp, fabs
+from math import sin, cos, exp, fabs,pi
 
 
 def I1(x):
@@ -85,7 +85,8 @@ allfuncs = [
 
 
     I16,
-    I17
+    I17,
+    myfunc
 ]
 # ...............................................................................
 allfuncnames = " ".join([f.__name__ for f in allfuncs])
@@ -106,6 +107,7 @@ I12._bounds = [0, 4]
 
 I16._bounds = [-5, 5]
 I17._bounds = [-5, 5]
+myfunc._bounds = [-pi, pi]
 # ...............................................................................
 def getfuncs(names, dim=0):
     """ for f in getfuncs( "a b ..." ):
