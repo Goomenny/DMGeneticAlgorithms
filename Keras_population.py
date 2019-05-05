@@ -10,7 +10,8 @@ class Keras_Population(Population):
                  bounds = None,
                  type_selection = None,
                  type_crossover = None,
-                 type_mutation = None):
+                 type_mutation = None,
+                 max_depth = None):
 
         super().__init__(algorithm = algorithm,
                  sizeofpopulation=sizeofpopulation,
@@ -22,39 +23,28 @@ class Keras_Population(Population):
                  type_mutation = type_mutation)
 
         for i in range(self.size):
-            self.individuums.append(Keras_Tree(max_depth=2, growth="part", variables=variables))
-            self.trial_individuums.append(Keras_Tree(max_depth=2, growth="part", variables=variables))
+            self.individuums.append(Keras_Tree(max_depth=max_depth, growth="part", variables=variables))
+            self.trial_individuums.append(Keras_Tree(max_depth=max_depth, growth="part", variables=variables))
 
-    def multi_calculating_fitness(self, i):
+    def multi_calculating_fitness(self, i, trial = False):
+        if trial:
+            return self.objective_function(self.trial_individuums[i].get_result)
+        else:
+            return self.objective_function(self.individuums[i].get_result)
 
-        return self.objective_function(self.individuums[i].get_result)
 
-    def multi_calculating_trial_fitness(self, i):
+    def calculate_fitnesses(self,trial=False):
 
-        return self.objective_function(self.trial_individuums[i].get_result)
-
-    def calculate_fitnesses(self):
+        if not trial:
+            individuums = self.individuums
+        else:
+            individuums = self.trial_individuums
 
         freeze_support()
         with Pool(processes=8) as pool:
-            multiple_results = [pool.apply_async(self.multi_calculating_fitness,(i,)) for i in range(self.size)]
+            multiple_results = [pool.apply_async(self.multi_calculating_fitness,(i,trial,)) for i in range(self.size)]
             val_loss = []
             for res in multiple_results:
                 val_loss.append(res.get())
             for i,ind in enumerate(self.individuums):
                 ind.fitness = 1 / (1 + val_loss[i])
-
-    def best_replacement(self):
-
-        freeze_support()
-        with Pool(processes=8) as pool:
-            multiple_results = [pool.apply_async(self.multi_calculating_trial_fitness, (i,)) for i in range(self.size)]
-            val_loss = []
-            for res in multiple_results:
-                val_loss.append(res.get())
-            for i, ind in enumerate(self.trial_individuums):
-                ind.fitness = 1 / (1 + val_loss[i])
-
-        for i in range(self.size):
-                if self.trial_individuums[i].fitness > self.individuums[i].fitness:
-                    self.individuums[i].copy(self.trial_individuums[i])

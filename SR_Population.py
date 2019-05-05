@@ -1,6 +1,6 @@
 from population import Population
 import random as rn
-
+from SR_Tree import SR_Tree
 class SR_Population(Population):
     def __init__(self,
                  algorithm=None,
@@ -19,9 +19,12 @@ class SR_Population(Population):
                                      bounds=bounds,
                                      type_selection=type_selection,
                                      type_crossover=type_crossover,
-                                     type_mutation=type_mutation,
-                                     max_depth = max_depth
+                                     type_mutation=type_mutation
                                      )
+
+        for i in range(self.size):
+            self.individuums.append(SR_Tree(max_depth=max_depth, growth="part", variables=variables))
+            self.trial_individuums.append(SR_Tree(max_depth=max_depth, growth="part", variables=variables))
 
     def calculate_fitnesses(self, trial = False):
         if not trial:

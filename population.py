@@ -1,4 +1,4 @@
-from Keras_Tree import Keras_Tree as Tree
+
 from binary_string import binary_string
 import random as rn
 import copy
@@ -137,9 +137,13 @@ class Population:
             if self.i_best != i:
                 ind.mutate(mutation_type=self.operators["mutation"][i])
 
-    def calculate_fitnesses(self):
+    def calculate_fitnesses(self, trial = False):
 
-        for ind in self.individuums:
+        if not trial:
+            individuums = self.individuums
+        else:
+            individuums = self.trial_individuums
+        for i, ind in enumerate(individuums):
             if ind.changed:
                 ind.calculate_fitness(self.objective_function)
 
@@ -178,9 +182,6 @@ class Population:
     def best_replacement(self):
 
         for i in range(self.size):
-            if self.trial_individuums[i].changed:
-                self.trial_individuums[i].calculate_fitness(self.objective_function)
-
-                if self.trial_individuums[i].fitness > self.individuums[i].fitness:
-                    self.individuums[i].copy(self.trial_individuums[i])
+            if self.trial_individuums[i].fitness > self.individuums[i].fitness:
+                self.individuums[i].copy(self.trial_individuums[i])
 

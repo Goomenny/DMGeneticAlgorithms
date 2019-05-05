@@ -1,10 +1,10 @@
 import numpy as np
 from multiprocessing import Pool
-from Keras_population import Keras_Population as Population
 import random as rn
 class GeneticAlgorithm:
     def __init__(self,
                  algorithm = None,
+                 class_population = None,
                  size_of_population=100,
                  objective_function = None,
                  iterations = 100,
@@ -21,7 +21,7 @@ class GeneticAlgorithm:
         self.algorithm = algorithm
         self.selfconfiguration = selfconfiguration
         self.objective_function = objective_function
-        self.population = Population(algorithm = algorithm,
+        self.population = class_population(algorithm = algorithm,
                                      sizeofpopulation=size_of_population,
                                      objective_function=objective_function,
                                      variables=variables,
@@ -186,6 +186,7 @@ class GeneticAlgorithm:
                 self.save_selfconf_probabilities()
 
             self.population.dynamic_evolve()
+            self.population.calculate_fitnesses(trial=True)
             self.population.best_replacement()
 
             self.population.findBest()

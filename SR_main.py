@@ -9,6 +9,7 @@ import time
 import problem as pr
 from problem import problem
 import testfuncs_semenkina as tfunc
+from SR_Population import SR_Population
 
 if __name__ == '__main__':
 
@@ -19,7 +20,7 @@ if __name__ == '__main__':
     #allfuncnames = tfunc.funcnames_minus()
     #allfuncs = [problem(func) for func in tfunc.allfuncs_minus()]
 
-    allfuncs = [problem(func,1) for func in tfunc.getfuncs(names="I2")]
+    allfuncs = [problem(func,1) for func in tfunc.getfuncs(names="myfunc")]
     allfuncs *=len(dims)
     params = [["dynamic", True, "rank", "standard", "weak"],
               ["standard", True, "rank", "standard", "weak"]
@@ -28,12 +29,13 @@ if __name__ == '__main__':
     # test.gp_start_parallel(allfuncs,params)
     # print(time.time()-t1)
     gp = genalgorithm.GeneticAlgorithm(algorithm="gp",
+                                       class_population=SR_Population,
                                        objective_function=allfuncs[0],
                                        variables=allfuncs[0].variables,
                                        selfconfiguration=True,
                                        scheme="dynamic",
                                        size_of_population = 100,
-                                       iterations=200,
+                                       iterations=100,
                                        max_depth = 6,
                                        type_selection="tournament_9",
                                        type_crossover="one_point",
@@ -45,7 +47,7 @@ if __name__ == '__main__':
     print(time.time()-t1)
     # cProfile.run("gp.run()", sort="tottime")
     # fitnesses = ga.fit_stats
-    # stats = ga.oper_stats
+    stats = gp.oper_stats
     # fitnesses =[fitnesses]
     # print(np.array(ga.fit_stats).shape)
     # gp=ga
@@ -67,25 +69,25 @@ if __name__ == '__main__':
     plt.scatter(x, aprox,s=1)
     plt.show()
     #
-    # if stats:
-    #     operator = "selection"
-    #     x = []
-    #     for i in range(stats["size"]):
-    #         x.append(i)
-    #
-    #     fig = plt.figure()
-    #     ax = {}
-    #     for i,operator in enumerate(stats):
-    #         if operator != "size":
-    #             ax[operator] = plt.subplot(2, 2, i+1)
-    #             plt.title(operator)
-    #             plt.grid()
-    #             for type in stats[operator]:
-    #                 ax[operator].plot(x,stats[operator][type]["probability"],label = type)
-    #
-    #
-    #             chartBox = ax[operator].get_position()
-    #             ax[operator].set_position([chartBox.x0, chartBox.y0, chartBox.width, chartBox.height])
-    #             ax[operator].legend(loc='upper center', bbox_to_anchor=(0.1, 0.9), shadow=True, ncol=1)
-    #     plt.show()
+    if stats:
+        operator = "selection"
+        x = []
+        for i in range(stats["size"]):
+            x.append(i)
+
+        fig = plt.figure()
+        ax = {}
+        for i,operator in enumerate(stats):
+            if operator != "size":
+                ax[operator] = plt.subplot(2, 2, i+1)
+                plt.title(operator)
+                plt.grid()
+                for type in stats[operator]:
+                    ax[operator].plot(x,stats[operator][type]["probability"],label = type)
+
+
+                chartBox = ax[operator].get_position()
+                ax[operator].set_position([chartBox.x0, chartBox.y0, chartBox.width, chartBox.height])
+                ax[operator].legend(loc='upper center', bbox_to_anchor=(0.1, 0.9), shadow=True, ncol=1)
+        plt.show()
     # #
