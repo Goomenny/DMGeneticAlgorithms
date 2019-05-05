@@ -8,7 +8,7 @@ OPERATORS = {'+': (operator.add, 2), '-': (operator.sub, 2),
              '*': (operator.mul, 2), '/': (operator.truediv, 2)}
 
 #OPERATORS['pow2'] =  (pow2, 1)
-OPERATORS['cos'] = (np.cos,1)
+#OPERATORS['cos'] = (np.cos,1)
 
 rncargo = lambda: (rn.random() * 40 - 20)
 
@@ -115,28 +115,32 @@ class SR_Node(Node):
         else:
             return self.cargo
     def mutate(self, probability):
+        changed = False
 
-        if rn.random() < probability:
-            if self.type:
+        if self.type:
+            if rn.random() < probability:
                 fl = True
                 while fl:
                     self.cargo = rn.choice(list(OPERATORS.keys()))
                     if OPERATORS[self.cargo][1] == self.arity:
                         fl = False
                         break
-            elif self.variable:
-
+                changed = True
+            for ind in self.offspring:
+                if ind.mutate(probability):
+                    changed = True
+        elif self.variable:
+            if rn.random() < probability:
                 variables = self.variables
                 if len(variables) > 1:
                     variables.remove(self.cargo)
                 self.cargo = rn.choice(variables)
-            else:
-                self.cargo = rncargo()
-            return True
-        changed = False
-        for ind in self.offspring:
-            if ind.mutate(probability):
                 changed = True
+        else:
+            if rn.random() < probability:
+                self.cargo = rncargo()
+                changed = True
+
         return changed
     def get_constant_nodes(self):
         if self is None: return
