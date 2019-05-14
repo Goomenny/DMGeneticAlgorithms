@@ -1,10 +1,13 @@
+import numpy as np
+import tensorflow as tf
+import random as rn
 import keras.backend as K
 from keras.datasets import reuters
 from keras.preprocessing import sequence
 from keras.utils import to_categorical
 max_features = 1000  # number of words to consider as features
 maxlen = 200  # cut texts after this number of words (among top max_features most common words)
-batch_size = 128
+batch_size = 64
 class problem():
     def __init__(self, obj_func = None):
         self.obj_func = obj_func
@@ -39,14 +42,21 @@ class problem():
             #print(x_test.shape)
             y_test = one_hot_test_labels
 
-            self.obj_func = [partial_x_train[::40],partial_y_train[::40]]
+            self.obj_func = [partial_x_train,partial_y_train]
 
+        np.random.seed(42)
+        rn.seed(12345)
+        session_conf = tf.ConfigProto(intra_op_parallelism_threads=1,
+                                      inter_op_parallelism_threads=1)
+        tf.set_random_seed(1234)
+        sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
+        K.set_session(sess)
 
         model = get_model(self.variables)
         history = model.fit(self.obj_func[0], self.obj_func[1],
                             epochs=1,
                             batch_size=batch_size,
-                            validation_split=.2, verbose=1)
+                            validation_split=.2, verbose=0)
         del model  # for avoid any trace on aigen
         K.clear_session()  # removing session, it will instance another
         return  history.history["val_loss"][0]
