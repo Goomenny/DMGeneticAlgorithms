@@ -4,15 +4,16 @@ import math
 import numpy as np
 from Node import Node
 pow2 = lambda x: (operator.pow(x,2))
+pow_sqrt = lambda x: (operator.pow(abs(x),0.5))
 OPERATORS = {'+': (operator.add, 2), '-': (operator.sub, 2),
              '*': (operator.mul, 2), '/': (operator.truediv, 2)}
 
-#OPERATORS['pow2'] =  (pow2, 1)
-#OPERATORS['cos'] = (np.cos,1)
-
+OPERATORS['pow2'] =  (pow2, 1)
+# OPERATORS['sqrt'] =  (pow_sqrt, 1)
+OPERATORS['cos'] = (np.cos,1)
+OPERATORS['exp'] = (np.exp,1)
+# OPERATORS['sin'] = (np.sin,1)
 rncargo = lambda: (rn.random() * 40 - 20)
-
-
 
 
 class SR_Node(Node):
@@ -131,10 +132,8 @@ class SR_Node(Node):
                     changed = True
         elif self.variable:
             if rn.random() < probability:
-                variables = self.variables
-                if len(variables) > 1:
-                    variables.remove(self.cargo)
-                self.cargo = rn.choice(variables)
+
+                self.cargo = rn.choice(self.variables)
                 changed = True
         else:
             if rn.random() < probability:

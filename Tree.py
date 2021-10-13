@@ -67,7 +67,7 @@ class Tree:
                 return self_copy
 
 
-        if crossover_type is "standard" or common_nodes[1:]:
+        if crossover_type == "standard" or common_nodes[1:]:
             if changednode.deep + nodeforchange.get_depth() - nodeforchange.deep > self.max_depth:
                 self_copy.changed = False
                 return self_copy

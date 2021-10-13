@@ -3,12 +3,13 @@ import _pickle as pickle
 import os
 from multiprocessing import Pool, TimeoutError
 import numpy as np
+from SR_Population import SR_Population
 import problem
 # # определяем текущий каталог и печатаем
 # path = os.getcwd()
 # print ("Текущая рабочая директория %s" % path)
 class Test:
-    def __init__(self, runs = 100,size_of_population = 200,iterations = 200):
+    def __init__(self, runs = 100,size_of_population = 100,iterations = 200):
 
         self.runs = runs
         self.size_of_population = size_of_population
@@ -97,31 +98,86 @@ class Test:
             multiple_results = [pool.apply_async(self.do_test_, parameters) for parameters in all_combinations]
             for res in multiple_results:
                 res.get()
+
+    def gp_start_parallel_by_runs(self,obj_funcs,params):
+        all_combinations = []
+        # params = [["dynamic", True, "rank", "standard", "weak"],
+        #           ["standard", True, "rank", "standard", "weak"]
+        #           ]
+        for obj_func in obj_funcs:
+
+            path = "GPstats_tests"+str(self.size_of_population)+str(self.iterations)+"/"+obj_func.__name__+"/"+str(obj_func.dim)+"d"
+            try:
+                os.makedirs(path)
+            except OSError:
+                print("Создать директорию %s не удалось" % path)
+            else:
+                print("Успешно создана директория %s" % path)
+
+            for param in params:
+                all_combinations.append((obj_func,param,path,))
+
+        for obj_func,param,path in all_combinations:
+            fit = []
+            gp = []
+            for run in range(self.runs):
+                gp.append(GeneticAlgorithm(algorithm="gp",
+                                           class_population=SR_Population,
+                                           objective_function=obj_func,
+                                           selfconfiguration=param[1],
+                                           scheme=param[0],
+                                           variables=obj_func.variables,
+                                           size_of_population=self.size_of_population,
+                                           max_depth=5,
+                                           iterations=self.iterations,
+                                           type_selection=param[2],
+                                           type_crossover=param[3],
+                                           type_mutation=param[4],
+                                           nprint=-1))
+
+            with Pool(processes=4) as pool:
+                multiple_results = [pool.apply_async(self.do_gp, (gp,i,)) for i in range(self.runs)]
+                for res in multiple_results:
+                    fit.append(res.get())
+
+
+            fit = np.array(fit)
+
+            np.savez(path + "/" + gp[0].name, fit=fit)
+            print("Успешно записан %s" % gp[0].name)
+
+    def do_gp(self,gp,i):
+        gp[i].run()
+        print("Finished ",i)
+        return gp[i].fit_stats
+
     def do_test_(self,obj_func,param,path):
 
         fit = []
-
+        gp = []
         for run in range(self.runs):
-            gp = GeneticAlgorithm(algorithm="gp",
+            gp.append(GeneticAlgorithm(algorithm="gp",
                                   objective_function=obj_func,
                                   selfconfiguration=param[1],
                                   scheme=param[0],
                                   variables=obj_func.variables,
                                   size_of_population=self.size_of_population,
+                                  max_depth=5,
                                   iterations=self.iterations,
                                   type_selection=param[2],
                                   type_crossover=param[3],
                                   type_mutation=param[4],
-                                  nprint=-1)
-            gp.run()
-            fit.append(gp.fit_stats)
+                                  nprint=-1))
+        for i in range(self.runs):
+            gp[i].run()
+            fit.append(gp[i].fit_stats)
 
-            print(param[0], run)
+            print(param[0], i)
 
         fit = np.array(fit)
 
-        np.savez(path + "/" + gp.name, fit=fit)
-        print("Успешно записан %s" % gp.name)
+        np.savez(path + "/" + gp[0].name, fit=fit)
+        print("Успешно записан %s" % gp[0].name)
 
 
 

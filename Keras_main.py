@@ -1,8 +1,8 @@
 import genalgorithm
 from Keras_problem import problem
 from Keras_population import Keras_Population
-
-from multiprocessing import freeze_support
+import numpy as np
+import time
 #
 
 import os
@@ -23,3 +23,14 @@ if __name__ == '__main__':
                                            type_mutation="growth",
                                             nprint=1)
     gp.run()
+    start = time.time()
+    gp.run()
+
+    fit = np.array(gp.fit_stats)
+
+    np.savez(gp.name, fit=fit)
+    print("Успешно записан %s, time = %s" % (gp.name, time.time() - start))
+    print(gp.population.bestInd.get_formula())
+    print(gp.population.bestInd.root.get_architecture())
+    with open(f"{gp.name}.txt", 'w', encoding='utf-8') as f:
+        f.write(gp.population.bestInd.get_formula())

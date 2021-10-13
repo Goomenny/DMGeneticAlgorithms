@@ -65,9 +65,17 @@ def I16(x):
 def I17(x):
 
     return sin(x)+x
-def myfunc(x):
+def mysin(x):
 
     return sin(x)
+
+def my1(x):
+    x,y,z = x
+    return x**2+3*x+2*y+z+5
+
+def my4(x):
+    x1, x2 = x
+    return x1**2+2*x2**2
 
 allfuncs = [
     I1,
@@ -86,7 +94,9 @@ allfuncs = [
 
     I16,
     I17,
-    myfunc
+    mysin,
+    my1,
+    my4
 ]
 # ...............................................................................
 allfuncnames = " ".join([f.__name__ for f in allfuncs])
@@ -107,7 +117,9 @@ I12._bounds = [0, 4]
 
 I16._bounds = [-5, 5]
 I17._bounds = [-5, 5]
-myfunc._bounds = [-pi, pi]
+mysin._bounds = [-pi, pi]
+my1._bounds = [-5, 5]
+my4._bounds = [-5, 5]
 # ...............................................................................
 def getfuncs(names, dim=0):
     """ for f in getfuncs( "a b ..." ):

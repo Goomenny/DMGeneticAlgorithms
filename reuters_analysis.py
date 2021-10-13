@@ -6,7 +6,6 @@ import os
 from sklearn.metrics import mean_squared_error
 from ndtestfuncs import getminpoint,name_to_func
 from math import fabs
-from keras.datasets import reuters
 def reliability(func_name,x_aprox):
     step = 50
     n = int(x_aprox.shape[1] / step)
@@ -34,51 +33,56 @@ def pltfigures():
     path = "C:/Users/goome/YandexDisk/PycharmProjects/GP/reuters/"
     ax = {}
     d=0
-    fig = plt.figure(figsize=(10, 6))
+    fig = plt.figure(figsize=(8, 4))
 
 
     pfiles = os.listdir(path)
     for pfile in pfiles:
 
 
-        if "3050" in pfile:
+        if "final" in pfile:
             pparams = os.listdir(path +"/"+pfile+"/")
 
 
-            ax[pfile]=plt.subplot(2, 2, d + 1)
-            d+=1
-            plt.title(pfile, fontsize=10)
+            # ax[pfile]=plt.subplot(2, 2, d + 1)
+            # d+=1
+            #plt.title(pfile, fontsize=10)
 
             # try:
             #     os.makedirs("E:/stats_np2/" + pfunc + "/" + pdim + "/")
             # except:
             #     pass
             for i,pparam in enumerate(pparams):
-                if "" in pparam:
+                if not "txt" in pparam:
                     with np.load(path +"/"+pfile+"/"+pparam, 'r') as data:
                         #stats= pickle.load(data)
                         fitnesses = data["fit"]
 
                         if "standard" in pparam:
-                            plt.plot(np.max(fitnesses,axis=1).T,color='b')
+                            mass = list(np.max(fitnesses, axis=1).T)
+                            mass1 = [ max(mass[:i+1]) for i,val in enumerate(mass)]
+                            #plt.plot(np.max(fitnesses,axis=1).T,color='b')
+                            mass1 = np.array(mass1)
+                            plt.plot((1-mass1)/mass1,color = "b",label="Стандартный")
                             print(np.max(fitnesses,axis=1).T)
                             # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='b')
 
                         elif "dynamic" in pparam:
                             # plt.plot(np.array([list(map(name_to_func[pfunc], xi)) for xi in x]).T, color='r')
-                            plt.plot(np.max(fitnesses,axis=1).T, color='r')
+                            plt.plot((1-np.max(fitnesses,axis=1).T)/np.max(fitnesses,axis=1).T,color='r',label="Модифицированный")
+                            print(np.max(fitnesses, axis=1).T)
             plt.grid()
             #plt.semilogy()
-            plt.ylabel('Надежность')
+            plt.ylabel('Loss')
             #plt.ylim(0, 1.05)
             plt.xlabel('Поколение')
 
-    plt.legend(loc='center left', bbox_to_anchor=(1.05, 0.5), ncol=1)
+    plt.legend()
     plt.subplots_adjust(wspace=0.07)
 
     fig.tight_layout()
 
-    fig.savefig('C:/Users/goome/YandexDisk/учеба/Магдип/zakharov.png')
+    #fig.savefig('C:/Users/goome/YandexDisk/учеба/Магдип/zakharov.png')
     plt.show()
 
 def pltreliability():

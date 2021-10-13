@@ -1,5 +1,6 @@
 import numpy as np
 from multiprocessing import Pool
+import csv
 import random as rn
 class GeneticAlgorithm:
     def __init__(self,
@@ -29,7 +30,7 @@ class GeneticAlgorithm:
                                      type_selection=type_selection,
                                      type_crossover=type_crossover,
                                      type_mutation=type_mutation,
-                                     max_depth = max_depth
+                                    max_depth = max_depth
                                      )
 
         self.name = algorithm+"#"+scheme+"#"
@@ -60,6 +61,7 @@ class GeneticAlgorithm:
         self.x_stats = []
         self.oper_stats = {operator:{type: dict(probability=[]) for type in self.operators[operator]} for operator in self.operators}
         self.oper_stats["size"] = self.iterations
+        self.solutions = []
         self.reset_probabilities()
 
 
@@ -79,6 +81,27 @@ class GeneticAlgorithm:
                 print(self.population.bestInd.get_result())
             elif self.algorithm == "gp":
                 print(self.population.bestInd.get_formula())
+
+
+    def save_population_stats(self,i):
+
+        fitnesses = np.array(self.population.get_fitnesses())
+
+        with open('population_statistics.csv', 'a', newline='') as csvfile:
+            fieldnames = ["Population" ,"Max" ,'Mean', 'Std', 'Mode','Formula', "Depth"]
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter="\t")
+            writer.writeheader()
+            writer.writerow({"Population" : i, "Max" : fitnesses.max(),"Mean" : fitnesses.mean(),
+                             "Std": fitnesses.std(), "Mode": np.percentile(fitnesses, 50), "Formula": self.population.bestInd.get_formula(), "Depth" : self.population.bestInd.get_depth()})
+            writer.writerow({"Population": "---","Max": "---", "Mean": "---", "Std": "---",
+                             "Mode": "---","Depth": "---"})
+
+            fieldnames = ["",'fitness', 'formula', "depth", max(fitnesses)]
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter="\t")
+            writer.writeheader()
+            writer.writerows([{"formula" : individuum.get_formula(), "fitness": individuum.fitness, "depth":individuum.get_depth()} for individuum in self.population.individuums])
+            writer.writerow({"formula": "======", "fitness": "======"})
+
     def reset_probabilities(self):
 
         self.params = {operator:{type: dict(probability=1 / len(self.operators[operator]), average_fitness=0, amount = 0) for type in self.operators[operator]}  for operator in self.operators }
@@ -132,6 +155,12 @@ class GeneticAlgorithm:
         self.fit_stats.append(self.population.get_fitnesses())
         if self.algorithm == "ga":
             self.x_stats.append(self.population.bestInd.get_result())
+            tmp = []
+            for ind in self.population.individuums:
+                tmp.append(ind.get_result())
+            self.solutions.append(tmp)
+        if self.algorithm == "gp":
+            self.x_stats.append(self.population.bestInd.get_result)
 
     def run_standard(self):
 
@@ -145,6 +174,7 @@ class GeneticAlgorithm:
         for i in range(self.iterations):
 
             self.print_iter_stats(i)
+            self.save_population_stats(i)
 
             self.population.proportionalSelection()
             self.population.rankSelection()
@@ -176,6 +206,7 @@ class GeneticAlgorithm:
         for i in range(self.iterations):
 
             self.print_iter_stats(i)
+            self.save_population_stats(i)
 
             self.population.proportionalSelection()
             self.population.rankSelection()
@@ -192,9 +223,14 @@ class GeneticAlgorithm:
             self.population.findBest()
             self.add_stats()
 
+
+
     def run(self):
 
         if self.scheme == "dynamic":
             self.run_dynamic()
         elif self.scheme == "standard":
             self.run_standard()
+
+    def get_best_ind(self):
+        return self.population.bestInd

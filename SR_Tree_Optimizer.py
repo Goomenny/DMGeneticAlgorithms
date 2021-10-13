@@ -2,7 +2,7 @@ from scipy.optimize import minimize, differential_evolution
 import numpy as np
 import copy
 class SR_Tree_Optimizer:
-    maxiter = 10
+    maxiter = 3
 
 
     def res_func(self, x, tree, coefficient_nodes,obj_func):
